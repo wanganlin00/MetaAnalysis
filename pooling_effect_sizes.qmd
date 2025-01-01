@@ -1,0 +1,189 @@
+---
+title: "pooling effect sizes"
+---
+
+聚合效应大小
+
+```{r eval=FALSE}
+devtools::install_github("MathiasHarrer/dmetar")
+```
+
+## 固定效应模型
+
+$$
+\hat\theta_k = \theta + \epsilon_k
+$$
+
+当我们在荟萃分析中汇总效应时，我们应该给精度更高（即标准误差更小）的效应大小赋予更大的权重。如果我们想计算固定效应模型下的合并效应大小，那么我们只需使用所有研究的加权平均值。
+
+对于每一项研究k，计算其权重
+
+$$
+w_k = \frac{1}{s^2_k}
+$$
+
+\
+K项研究真实总体效应的最佳估计值：逆方差加权
+
+$$
+\hat\theta = \frac{\sum^{K}_{k=1} \hat\theta_kw_k}{\sum^{K}_{k=1} w_k}
+$$
+
+```{r}
+library(dmetar)
+library(meta)
+data(SuicidePrevention)
+# Calculate Hedges' g and the Standard Error
+# - We save the study names in "study".
+# - We use the pmap_dfr function to calculate the effect size for each row.
+SP_calc <- pmap_dfr(SuicidePrevention, 
+                    function(mean.e, sd.e, n.e, mean.c,
+                             sd.c, n.c, author, ...){
+                      esc::esc_mean_sd(grp1m = mean.e,
+                                  grp1sd = sd.e,
+                                  grp1n = n.e,
+                                  grp2m = mean.c,
+                                  grp2sd = sd.c,
+                                  grp2n = n.c,
+                                  study = author,
+                                  es.type = "g") %>% 
+                        as.data.frame()}) 
+
+glimpse(SP_calc)
+```
+
+```{r}
+# Calculate the inverse variance-weights for each study
+SP_calc$w <- 1/SP_calc$se^2
+
+# Then, we use the weights to calculate the pooled effect
+pooled_effect <- sum(SP_calc$w*SP_calc$es)/sum(SP_calc$w)
+pooled_effect
+```
+
+## 随机效应模型
+
+$$
+\theta_k  = \mu + \zeta_k
+$$
+
+$$
+\hat\theta_k = \mu + \zeta_k + \epsilon_k
+$$
+
+随机效应模型的可交换性假设：研究间异质性 $\zeta_k$ 与k独立
+
+$$
+w^*_k = \frac{1}{s^2_k+\tau^2}
+$$
+
+$$
+\hat\theta = \frac{\sum^{K}_{k=1} \hat\theta_kw^*_k}{\sum^{K}_{k=1} w^*_k}
+$$
+
+**研究间异质性：异质性方差** $\tau^2$ **估计方法**
+
+1.  对于基于连续结局数据的效应量，可以使用限制最大似然估计量作为第一个开始。
+
+2.  对于二元效应大小数据，Paule-Mandel 估计量是不错的首选，前提是样本大小没有极端变化。
+
+3.  当您有充分的理由相信样本中效应的异质性非常大，并且避免假阳性具有非常高的优先级时，您可以使用 Sidik-Jonkman 估计器。
+
+4.  如果您希望其他人可以在 *R* 之外尽可能精确地复制您的结果，那么 DerSimonian-Laird 估计器是首选方法。Cochran's Q
+
+**Knapp-Hartung 调整**
+
+合并效应的显著性检验通常假定正态分布（所谓的 Wald 型检验）
+
+但 Knapp-Hartung 方法基于t分布，Knapp-Hartung 调整只能在随机效应模型中使用，并且通常会导致合并效应的置信区间略大。
+
+## 效应值数据
+
+![](images/clipboard-3750106771.png)
+
+### Pre-calculated
+
+```{r}
+data(ThirdWave)
+glimpse(ThirdWave)
+```
+
+```{r}
+library(meta)
+m.gen <- metagen(TE = TE,
+                 seTE = seTE,
+                 studlab = Author,
+                 data = ThirdWave,
+                 sm = "SMD",
+                 fixed = FALSE,
+                 random = TRUE,
+                 method.tau = "REML",
+                 method.random.ci = "HK",
+                 title = "Third Wave Psychotherapies")
+summary(m.gen)
+```
+
+1.  第一部分包含各个研究，以及它们的效应值和置信区间
+
+2.  研究总数
+
+3.  随机效应模型效果大小：Knapp-Hartung 调整 t分布,估计值g≈0.58，并且 95% 置信区间范围为0.38 至 0.78。 ，
+
+4.  研究间异质性：`Quantifying heterogeneity` τ2=0.08（0.03-0.35） ,置信区间不包含零，表明我们的数据中存在一些研究间异质性。 $\tau$=0.29表示真实的效应大小具有估计的标准偏差SD=0.29，以效应大小度量的尺度表示（这里为Hedges’g）。I2=63%，H（H2的平方根）为1.64。这意味着，我们数据中超过一半的变化估计源于真实的效应大小差异
+
+所有这些都表明我们的数据中存在研究间异质性，随机效应模型是一个不错的选择。
+
+5.  异质性检验：Q=45.5和`Test of heterogeneity`。K−1=17 个自由度。因此，异质性检验是显著的 （p\<0.001）
+
+### 连续
+
+#### （标准化）平均差
+
+```{r}
+# Load dataset from dmetar (or download and open manually)
+data(SuicidePrevention)
+
+# Use metcont to pool results.
+m.cont <- metacont(n.e = n.e,
+                   mean.e = mean.e,
+                   sd.e = sd.e,
+                   n.c = n.c,
+                   mean.c = mean.c,
+                   sd.c = sd.c,
+                   studlab = author,
+                   data = SuicidePrevention,
+                   sm = "SMD",
+                   method.smd = "Hedges",
+                   fixed = FALSE,
+                   random = TRUE,
+                   method.tau = "REML",
+                   method.random.ci = "HK",
+                   title = "Suicide Prevention")
+summary(m.cont)
+```
+
+### 二分类
+
+`metabin()`
+
+#### RR
+
+```{r}
+data(DepressionMortality)
+glimpse(DepressionMortality)
+m.bin <- metabin(event.e = event.e, 
+                 n.e = n.e,
+                 event.c = event.c,
+                 n.c = n.c,
+                 studlab = author,
+                 data = DepressionMortality,
+                 sm = "RR",
+                 method = "MH",
+                 MH.exact = TRUE,
+                 fixed = TRUE,
+                 random = TRUE,
+                 method.tau = "PM",
+                 method.random.ci = "HK",
+                 title = "Depression and Mortality")
+summary(m.bin)
+```

@@ -1,0 +1,176 @@
+---
+title: "Meta 回归"
+---
+
+Meta-regression 通过假设混合效应模型来实现。由于抽样误差和研究之间的异质性，观察到的研究偏离了真实的总体效应。
+
+普通最小二乘法的加权版本
+
+meta 回归 使用一个或多个变量x来预测真实效应大小的差异。
+
+$$
+\hat\theta_k = \theta + \beta x_{k} + \epsilon_k+\zeta_k
+$$
+
+抽样误差$\epsilon_k$和研究间异质性 $\zeta_k$
+
+固定效应（$\beta$）和 随机效应（$\zeta_k$）
+
+## Meta回归模型
+
+### **使用分类预测因子的meta回归**
+
+$$
+\begin{equation}   
+D_g=\begin{cases}     
+0: & \text{Subgroup A}\\     
+1: & \text{Subgroup B.}   
+\end{cases}   
+\end{equation}
+$$
+
+$$
+\begin{equation} \hat\theta_k = \theta + \beta D_g +\epsilon_k+\zeta_k.  \end{equation}
+$$
+
+则
+
+$$
+\begin{equation}   D_g=\begin{cases}     0: & \text{$\hat\theta_k = \theta_A + \epsilon_k+\zeta_k$}\\     1: & \text{$\hat\theta_k = \theta_B + \theta_{\Delta} +\epsilon_k+\zeta_k$}   \end{cases}   \end{equation}
+$$
+
+![](images/metaregression_subgroups.png){fig-align="center" width="419"}
+
+### **使用连续预测因子的meta回归**
+
+![](images/metareg_form_continuous.png){fig-align="center" width="293"}
+
+```{r}
+library(meta)
+m.gen <- metagen(TE = TE,
+                 seTE = seTE,
+                 studlab = Author,
+                 data = dmetar::ThirdWave,
+                 sm = "SMD",
+                 fixed = FALSE,
+                 random = TRUE,
+                 method.tau = "REML",
+                 method.random.ci = "HK",
+                 prediction = T,
+                 title = "Third Wave Psychotherapies")
+summary(m.gen)
+```
+
+```{r}
+year <- c(2014, 1998, 2010, 1999, 2005, 2014, 
+          2019, 2010, 1982, 2020, 1978, 2001,
+          2018, 2002, 2009, 2011, 2011, 2013)
+
+m.gen.reg <- metareg(m.gen, ~year)
+m.gen.reg
+```
+
+$\hat\tau^2_{\text{unexplained}}=$ 0.0188
+
+$R^2_*$ =77.08% 意味着真实效应大小的 77% 的差异可以用出版年份来解释，这是一个相当大的值。
+
+```{r}
+bubble(m.gen.reg, studlab = TRUE)
+```
+
+```{r}
+# 通过meta回归进行亚组分析
+metareg(m.gen, RiskOfBias)
+```
+
+RiskOfBiaslow 效应大小 g = 0.7691-0.2992 ≈0.4699
+
+## **多元回归**
+
+$$
+\begin{equation} \hat \theta_k = \theta + \beta_1x_{1k} + ... + \beta_nx_{nk} + \epsilon_k + \zeta_k \tag{multiple-metareg} \end{equation}
+$$
+
+```{r packages-and-data}
+library(metafor)
+library(tidyverse)
+library(dmetar)
+data(MVRegressionData)
+glimpse(MVRegressionData)
+```
+
+### 多重共线性
+
+```{r}
+MVRegressionData[,c("reputation", "quality", "pubyear")] %>% 
+    cor()
+
+```
+
+```{r}
+m.qual <- rma(yi = yi,
+              sei = sei,
+              data = MVRegressionData,
+              method = "ML",
+              mods = ~ quality,
+              test = "knha")
+
+m.qual
+```
+
+```{r}
+m.qual.rep <- rma(yi = yi, 
+                  sei = sei, 
+                  data = MVRegressionData, 
+                  method = "ML", 
+                  mods = ~ quality + reputation, 
+                  test = "knha")
+
+m.qual.rep
+```
+
+```{r}
+anova(m.qual, m.qual.rep)
+```
+
+`anova` `LRT` X2= 19.4992 ,p\<0.001
+
+### 交互效应
+
+```{r}
+# Add factor labels to 'continent'
+# 0 = Europe
+# 1 = North America
+levels(MVRegressionData$continent) = c("Europe", "North America")
+
+# Fit the meta-regression model
+m.qual.rep.int <- rma(yi = yi, 
+                      sei = sei, 
+                      data = MVRegressionData, 
+                      method = "REML", 
+                      mods = ~ pubyear * continent, 
+                      test = "knha")
+
+m.qual.rep.int
+```
+
+### 过拟合
+
+$R^2_*$ = 100% ，在实践中，几乎不会解释数据中的所有异质性——事实上，如果在现实生活中的数据中找到这样的结果，这可能是模型过度拟合了。
+
+### 排列测试
+
+```{r}
+permutest(m.qual.rep)
+```
+
+### 多模型推理
+
+```{r}
+multimodel.inference(TE = "yi", 
+                     seTE = "sei",
+                     data = MVRegressionData,
+                     predictors = c("pubyear", "quality", 
+                                    "reputation", "continent"),
+                     interaction = FALSE)
+```

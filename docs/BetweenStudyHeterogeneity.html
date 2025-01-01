@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.32">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>3&nbsp; 研究间异质性 – Meta Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./forest_plots.html" rel="next">
+<link href="./pooling_effect_sizes.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-64b801fe9b6685c0a799f7172ecad621.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+</head>
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./BetweenStudyHeterogeneity.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">研究间异质性</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Meta Analysis</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">推荐阅读</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./effect_sizes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">效应大小</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pooling_effect_sizes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">pooling effect sizes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./BetweenStudyHeterogeneity.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">研究间异质性</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./forest_plots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">可视化</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./SubgroupAnalysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">亚组分析</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Meta_Regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Meta 回归</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./PublicationBias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">发表偏倚</span></span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#cochrans-q" id="toc-cochrans-q" class="nav-link active" data-scroll-target="#cochrans-q"><span class="header-section-number">3.1</span> Cochran’s Q</a></li>
+  <li><a href="#higgins-thompsons-i2statistic" id="toc-higgins-thompsons-i2statistic" class="nav-link" data-scroll-target="#higgins-thompsons-i2statistic"><span class="header-section-number">3.2</span> <strong>Higgins &amp; Thompson’s</strong> <span class="math inline">\(I^2\)</span>Statistic</a></li>
+  <li><a href="#h2-statistic" id="toc-h2-statistic" class="nav-link" data-scroll-target="#h2-statistic"><span class="header-section-number">3.3</span> <span class="math inline">\(H^2\)</span>&nbsp;statistic</a></li>
+  <li><a href="#heterogeneity-variance-tau2-standard-deviation-tau" id="toc-heterogeneity-variance-tau2-standard-deviation-tau" class="nav-link" data-scroll-target="#heterogeneity-variance-tau2-standard-deviation-tau"><span class="header-section-number">3.4</span> <strong>Heterogeneity Variance</strong> <span class="math inline">\(\tau^2\)</span>&amp; Standard Deviation <span class="math inline">\(\tau\)</span></a></li>
+  <li><a href="#prediction-intervals-pis" id="toc-prediction-intervals-pis" class="nav-link" data-scroll-target="#prediction-intervals-pis"><span class="header-section-number">3.5</span> Prediction intervals&nbsp;(PIs)&nbsp;</a></li>
+  <li>
+<a href="#%E5%BC%82%E5%B8%B8%E5%80%BC" id="toc-异常值" class="nav-link" data-scroll-target="#%E5%BC%82%E5%B8%B8%E5%80%BC"><span class="header-section-number">3.6</span> <strong>异常值</strong></a>
+  <ul>
+<li><a href="#%E5%88%A0%E9%99%A4" id="toc-删除" class="nav-link" data-scroll-target="#%E5%88%A0%E9%99%A4"><span class="header-section-number">3.6.1</span> 删除</a></li>
+  <li><a href="#%E5%BD%B1%E5%93%8D%E5%88%86%E6%9E%90" id="toc-影响分析" class="nav-link" data-scroll-target="#%E5%BD%B1%E5%93%8D%E5%88%86%E6%9E%90"><span class="header-section-number">3.6.2</span> 影响分析</a></li>
+  <li><a href="#gosh-plot-analysis" id="toc-gosh-plot-analysis" class="nav-link" data-scroll-target="#gosh-plot-analysis"><span class="header-section-number">3.6.3</span> <strong>GOSH Plot Analysis</strong></a></li>
+  </ul>
+</li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">
+<span class="chapter-number">3</span>&nbsp; <span class="chapter-title">研究间异质性</span>
+</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><p>Between-Study Heterogeneity <span class="math inline">\(\zeta_k\)</span></p>
+<section id="cochrans-q" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="cochrans-q">
+<span class="header-section-number">3.1</span> Cochran’s Q</h2>
+<p>Cochran’s Q定义为每一项研究与总体效应的偏差<strong>加权平方和</strong> （weighted sum of squares, WSS）。</p>
+<p><span class="math display">\[
+Q=\sum_{k=1}^K \omega_k(\hat \theta_k - \hat\theta)^2
+\]</span></p>
+<p>当研究之间没有异质性即<span class="math inline">\(\zeta_k =0\)</span> 仅有抽样误差，假设</p>
+<p><span class="math display">\[
+\hat\theta_k-\hat\theta\sim N(0,1)
+\]</span></p>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span> <span class="co"># needed to reproduce results</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">40</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] -0.56047565 -0.23017749  1.55870831  0.07050839  0.12928774  1.71506499</span></span>
+<span><span class="co">#&gt;  [7]  0.46091621 -1.26506123 -0.68685285 -0.44566197  1.22408180  0.35981383</span></span>
+<span><span class="co">#&gt; [13]  0.40077145  0.11068272 -0.55584113  1.78691314  0.49785048 -1.96661716</span></span>
+<span><span class="co">#&gt; [19]  0.70135590 -0.47279141 -1.06782371 -0.21797491 -1.02600445 -0.72889123</span></span>
+<span><span class="co">#&gt; [25] -0.62503927 -1.68669331  0.83778704  0.15337312 -1.13813694  1.25381492</span></span>
+<span><span class="co">#&gt; [31]  0.42646422 -0.29507148  0.89512566  0.87813349  0.82158108  0.68864025</span></span>
+<span><span class="co">#&gt; [37]  0.55391765 -0.06191171 -0.30596266 -0.38047100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">error_fixed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10000</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">40</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">error_fixed</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">hat</a></span><span class="op">(</span><span class="va">theta</span><span class="op">[</span><span class="va">k</span><span class="op">]</span><span class="op">)</span><span class="op">~</span><span class="op">-</span><span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">hat</a></span><span class="op">(</span><span class="va">theta</span><span class="op">)</span><span class="op">)</span>, prob <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>     breaks <span class="op">=</span> <span class="fl">100</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.45</span><span class="op">)</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>,<span class="fl">4</span><span class="op">)</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">"No Heterogeneity"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">0.01</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">dnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">0.01</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>      col <span class="op">=</span> <span class="st">"blue"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="BetweenStudyHeterogeneity_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>假设研究之间存在异质性&nbsp;（<span class="math inline">\(\zeta_k\)</span>）和抽样误差（<span class="math inline">\(\epsilon_k\)</span>）</p>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">error_random</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10000</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">40</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">40</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">error_random</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">hat</a></span><span class="op">(</span><span class="va">theta</span><span class="op">[</span><span class="va">k</span><span class="op">]</span><span class="op">)</span><span class="op">~</span><span class="op">-</span><span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">hat</a></span><span class="op">(</span><span class="va">theta</span><span class="op">)</span><span class="op">)</span>, prob <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>     breaks <span class="op">=</span> <span class="fl">100</span>,ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.45</span><span class="op">)</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>,<span class="fl">4</span><span class="op">)</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">"Heterogeneity"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">0.01</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">dnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">0.01</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>      col <span class="op">=</span> <span class="st">"blue"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="BetweenStudyHeterogeneity_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>计算Q，假设加权=1</p>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">Q_fixed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="fl">10000</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">40</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">Q_random</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="fl">10000</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">40</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">40</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>自由度为K−1的卡方分布（其中K是我们荟萃分析中的研究数量）</p>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fl">40</span><span class="op">-</span><span class="fl">1</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">Q_fixed</span>, xlab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="fu">italic</span><span class="op">(</span><span class="st">"Q"</span><span class="op">)</span><span class="op">)</span>, prob <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>     breaks <span class="op">=</span> <span class="fl">100</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.06</span><span class="op">)</span>,xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">160</span><span class="op">)</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">"No Heterogeneity"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">0.01</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">dchisq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">0.01</span><span class="op">)</span>, df <span class="op">=</span> <span class="va">df</span><span class="op">)</span>, </span>
+<span>      col <span class="op">=</span> <span class="st">"blue"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="BetweenStudyHeterogeneity_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">Q_random</span>,  xlab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="fu">italic</span><span class="op">(</span><span class="st">"Q"</span><span class="op">)</span><span class="op">)</span>, prob <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>     breaks <span class="op">=</span> <span class="fl">100</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.06</span><span class="op">)</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">160</span><span class="op">)</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">"Heterogeneity"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">0.01</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">dchisq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">0.01</span><span class="op">)</span>, df <span class="op">=</span> <span class="va">df</span><span class="op">)</span>, </span>
+<span>      col <span class="op">=</span> <span class="st">"blue"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="BetweenStudyHeterogeneity_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="higgins-thompsons-i2statistic" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="higgins-thompsons-i2statistic">
+<span class="header-section-number">3.2</span> <strong>Higgins &amp; Thompson’s</strong> <span class="math inline">\(I^2\)</span>Statistic</h2>
+<p><span class="math inline">\(I^2\)</span> 是另一种估计异质性的方法，基于Cochran’s Q。 它被定义为不是由抽样误差引起的效应量的变异百分比</p>
+<p><span class="math inline">\(I^2\)</span> 基于以下假设：在无异质性的零假设下，Q遵循具有K-1自由度的χ2分布。它以百分比的形式量化了在没有异质性（即K-1）的情况下，观察到的Q值超过预期Q值的程度。</p>
+<p><span class="math display">\[
+I^2=\frac{Q-(K-1)}{Q}
+\]</span></p>
+<p>I2的值不能低于0%，因此如果Q恰好小于K-1，我们只需使用0而不是负值</p>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Display the value of the 10th simulation of Q</span></span>
+<span><span class="va">Q_fixed</span><span class="op">[</span><span class="fl">10</span><span class="op">]</span></span>
+<span><span class="co">#&gt; [1] 35.85787</span></span>
+<span></span>
+<span><span class="co"># Define k</span></span>
+<span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">40</span></span>
+<span></span>
+<span><span class="co"># Calculate I^2</span></span>
+<span><span class="op">(</span><span class="va">Q_fixed</span><span class="op">[</span><span class="fl">10</span><span class="op">]</span> <span class="op">-</span> <span class="op">(</span><span class="va">k</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="va">Q_fixed</span><span class="op">[</span><span class="fl">10</span><span class="op">]</span></span>
+<span><span class="co">#&gt; [1] -0.08762746</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><span class="math inline">\(I^2\)</span>&nbsp;= 0% 说明效应量的0%是由研究间的异质性引起的</p>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="op">(</span><span class="va">Q_random</span><span class="op">[</span><span class="fl">10</span><span class="op">]</span> <span class="op">-</span> <span class="op">(</span><span class="va">k</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="va">Q_random</span><span class="op">[</span><span class="fl">10</span><span class="op">]</span></span>
+<span><span class="co">#&gt; [1] 0.5692061</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>大约一半的差异是由于研究之间的异质性造成的。这也符合我们的预期，因为此示例中的变异同等程度地基于模拟的抽样误差和研究之间的异质性。</p>
+<ul>
+<li><p>I2 = 25%: low heterogeneity</p></li>
+<li><p>I2 = 50%: moderate heterogeneity</p></li>
+<li><p>I2 = 75%: substantial heterogeneity.</p></li>
+</ul></section><section id="h2-statistic" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="h2-statistic">
+<span class="header-section-number">3.3</span> <span class="math inline">\(H^2\)</span>&nbsp;statistic</h2>
+<p>它描述了由Q测量的观察到的变化与由于采样误差引起的预期变化的比率</p>
+<p><span class="math display">\[
+H^2=\frac{Q}{K-1}
+\]</span></p>
+<p>当研究之间没有异质性时，H2等于1（或更小）。大于1的值表示研究之间存在异质性。</p>
+</section><section id="heterogeneity-variance-tau2-standard-deviation-tau" class="level2" data-number="3.4"><h2 data-number="3.4" class="anchored" data-anchor-id="heterogeneity-variance-tau2-standard-deviation-tau">
+<span class="header-section-number">3.4</span> <strong>Heterogeneity Variance</strong> <span class="math inline">\(\tau^2\)</span>&amp; Standard Deviation <span class="math inline">\(\tau\)</span>
+</h2>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/guido-s/meta/">meta</a></span><span class="op">)</span></span>
+<span><span class="va">m.gen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/meta/man/metagen.html">metagen</a></span><span class="op">(</span>TE <span class="op">=</span> <span class="va">TE</span>,</span>
+<span>                 seTE <span class="op">=</span> <span class="va">seTE</span>,</span>
+<span>                 studlab <span class="op">=</span> <span class="va">Author</span>,</span>
+<span>                 data <span class="op">=</span> <span class="fu">dmetar</span><span class="fu">::</span><span class="va"><a href="http://dmetar.protectlab.org/reference/ThirdWave.html">ThirdWave</a></span>,</span>
+<span>                 sm <span class="op">=</span> <span class="st">"SMD"</span>,</span>
+<span>                 fixed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                 random <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                 method.tau <span class="op">=</span> <span class="st">"REML"</span>,</span>
+<span>                 method.random.ci <span class="op">=</span> <span class="st">"HK"</span>,</span>
+<span>                 title <span class="op">=</span> <span class="st">"Third Wave Psychotherapies"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Pooled effect</span></span>
+<span><span class="va">m.gen</span><span class="op">$</span><span class="va">TE.random</span></span>
+<span><span class="co">#&gt; [1] 0.5771158</span></span>
+<span></span>
+<span><span class="co"># Estimate of tau</span></span>
+<span><span class="va">m.gen</span><span class="op">$</span><span class="va">tau</span></span>
+<span><span class="co">#&gt; [1] 0.2863311</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>我们看到了g=0.58 和τ=0.29. 根据这些数据，我们可以计算出 95% 真实效应量置信区间的下限和上限：0.58−1.96×0.29 = 0.01 和 0.58 1.96+×0.29 = 1.15。</p>
+</section><section id="prediction-intervals-pis" class="level2" data-number="3.5"><h2 data-number="3.5" class="anchored" data-anchor-id="prediction-intervals-pis">
+<span class="header-section-number">3.5</span> Prediction intervals&nbsp;(PIs)&nbsp;</h2>
+<p>95% 预测区间的公式如下所示：</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="images/clipboard-3273423715.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m.gen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html">update</a></span><span class="op">(</span><span class="va">m.gen</span>, prediction <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m.gen</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Review:     Third Wave Psychotherapies</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                           SMD            95%-CI %W(random)</span></span>
+<span><span class="co">#&gt; Call et al.            0.7091 [ 0.1979; 1.2203]        5.0</span></span>
+<span><span class="co">#&gt; Cavanagh et al.        0.3549 [-0.0300; 0.7397]        6.3</span></span>
+<span><span class="co">#&gt; DanitzOrsillo          1.7912 [ 1.1139; 2.4685]        3.8</span></span>
+<span><span class="co">#&gt; de Vibe et al.         0.1825 [-0.0484; 0.4133]        7.9</span></span>
+<span><span class="co">#&gt; Frazier et al.         0.4219 [ 0.1380; 0.7057]        7.3</span></span>
+<span><span class="co">#&gt; Frogeli et al.         0.6300 [ 0.2458; 1.0142]        6.3</span></span>
+<span><span class="co">#&gt; Gallego et al.         0.7249 [ 0.2846; 1.1652]        5.7</span></span>
+<span><span class="co">#&gt; Hazlett-Stevens &amp; Oren 0.5287 [ 0.1162; 0.9412]        6.0</span></span>
+<span><span class="co">#&gt; Hintz et al.           0.2840 [-0.0453; 0.6133]        6.9</span></span>
+<span><span class="co">#&gt; Kang et al.            1.2751 [ 0.6142; 1.9360]        3.9</span></span>
+<span><span class="co">#&gt; Kuhlmann et al.        0.1036 [-0.2781; 0.4853]        6.3</span></span>
+<span><span class="co">#&gt; Lever Taylor et al.    0.3884 [-0.0639; 0.8407]        5.6</span></span>
+<span><span class="co">#&gt; Phang et al.           0.5407 [ 0.0619; 1.0196]        5.3</span></span>
+<span><span class="co">#&gt; Rasanen et al.         0.4262 [-0.0794; 0.9317]        5.1</span></span>
+<span><span class="co">#&gt; Ratanasiripong         0.5154 [-0.1731; 1.2039]        3.7</span></span>
+<span><span class="co">#&gt; Shapiro et al.         1.4797 [ 0.8618; 2.0977]        4.2</span></span>
+<span><span class="co">#&gt; Song &amp; Lindquist       0.6126 [ 0.1683; 1.0569]        5.7</span></span>
+<span><span class="co">#&gt; Warnecke et al.        0.6000 [ 0.1120; 1.0880]        5.2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Number of studies: k = 18</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                              SMD            95%-CI    t  p-value</span></span>
+<span><span class="co">#&gt; Random effects model (HK) 0.5771 [ 0.3782; 0.7760] 6.12 &lt; 0.0001</span></span>
+<span><span class="co">#&gt; Prediction interval              [-0.0542; 1.2084]              </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Quantifying heterogeneity (with 95%-CIs):</span></span>
+<span><span class="co">#&gt;  tau^2 = 0.0820 [0.0295; 0.3533]; tau = 0.2863 [0.1717; 0.5944]</span></span>
+<span><span class="co">#&gt;  I^2 = 62.6% [37.9%; 77.5%]; H = 1.64 [1.27; 2.11]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test of heterogeneity:</span></span>
+<span><span class="co">#&gt;      Q d.f. p-value</span></span>
+<span><span class="co">#&gt;  45.50   17  0.0002</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Details of meta-analysis methods:</span></span>
+<span><span class="co">#&gt; - Inverse variance method</span></span>
+<span><span class="co">#&gt; - Restricted maximum-likelihood estimator for tau^2</span></span>
+<span><span class="co">#&gt; - Q-Profile method for confidence interval of tau^2 and tau</span></span>
+<span><span class="co">#&gt; - Calculation of I^2 based on Q</span></span>
+<span><span class="co">#&gt; - Hartung-Knapp adjustment for random effects model (df = 17)</span></span>
+<span><span class="co">#&gt; - Prediction interval based on t-distribution (df = 17)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>在合并效应的直接作用下，我们看到了预测区间。其范围为g=-0.06至1.21。这意味着，根据目前的证据，未来的一些研究可能会发现负面的治疗效果。然而，间隔相当宽，这意味着也可能产生非常高的效果。</p>
+</section><section id="异常值" class="level2" data-number="3.6"><h2 data-number="3.6" class="anchored" data-anchor-id="异常值">
+<span class="header-section-number">3.6</span> <strong>异常值</strong>
+</h2>
+<section id="删除" class="level3" data-number="3.6.1"><h3 data-number="3.6.1" class="anchored" data-anchor-id="删除">
+<span class="header-section-number">3.6.1</span> 删除</h3>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">dmetar</span><span class="fu">::</span><span class="fu"><a href="http://dmetar.protectlab.org/reference/find.outliers.html">find.outliers</a></span><span class="op">(</span><span class="va">m.gen</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Identified outliers (random-effects model) </span></span>
+<span><span class="co">#&gt; ------------------------------------------ </span></span>
+<span><span class="co">#&gt; "DanitzOrsillo", "Shapiro et al." </span></span>
+<span><span class="co">#&gt;  </span></span>
+<span><span class="co">#&gt; Results with outliers removed </span></span>
+<span><span class="co">#&gt; ----------------------------- </span></span>
+<span><span class="co">#&gt; Review:     Third Wave Psychotherapies</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Number of studies: k = 16</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                              SMD           95%-CI    t  p-value</span></span>
+<span><span class="co">#&gt; Random effects model (HK) 0.4528 [0.3257; 0.5800] 7.59 &lt; 0.0001</span></span>
+<span><span class="co">#&gt; Prediction interval              [0.1705; 0.7352]              </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Quantifying heterogeneity (with 95%-CIs):</span></span>
+<span><span class="co">#&gt;  tau^2 = 0.0139 [0.0000; 0.1032]; tau = 0.1180 [0.0000; 0.3213]</span></span>
+<span><span class="co">#&gt;  I^2 = 24.8% [0.0%; 58.7%]; H = 1.15 [1.00; 1.56]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test of heterogeneity:</span></span>
+<span><span class="co">#&gt;      Q d.f. p-value</span></span>
+<span><span class="co">#&gt;  19.95   15  0.1739</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Details of meta-analysis methods:</span></span>
+<span><span class="co">#&gt; - Inverse variance method</span></span>
+<span><span class="co">#&gt; - Restricted maximum-likelihood estimator for tau^2</span></span>
+<span><span class="co">#&gt; - Q-Profile method for confidence interval of tau^2 and tau</span></span>
+<span><span class="co">#&gt; - Calculation of I^2 based on Q</span></span>
+<span><span class="co">#&gt; - Hartung-Knapp adjustment for random effects model (df = 15)</span></span>
+<span><span class="co">#&gt; - Prediction interval based on t-distribution (df = 15)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section><section id="影响分析" class="level3" data-number="3.6.2"><h3 data-number="3.6.2" class="anchored" data-anchor-id="影响分析">
+<span class="header-section-number">3.6.2</span> 影响分析</h3>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m.gen.inf</span> <span class="op">&lt;-</span> <span class="fu">dmetar</span><span class="fu">::</span><span class="fu"><a href="http://dmetar.protectlab.org/reference/InfluenceAnalysis.html">InfluenceAnalysis</a></span><span class="op">(</span><span class="va">m.gen</span>, random <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [===========================================================================] DONE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m.gen.inf</span>, <span class="st">"baujat"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="BetweenStudyHeterogeneity_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m.gen.inf</span>, <span class="st">"influence"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="BetweenStudyHeterogeneity_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m.gen.inf</span>, <span class="st">"es"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="BetweenStudyHeterogeneity_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m.gen.inf</span>, <span class="st">"i2"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="BetweenStudyHeterogeneity_files/figure-html/unnamed-chunk-15-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="gosh-plot-analysis" class="level3" data-number="3.6.3"><h3 data-number="3.6.3" class="anchored" data-anchor-id="gosh-plot-analysis">
+<span class="header-section-number">3.6.3</span> <strong>GOSH Plot Analysis</strong>
+</h3>
+<p>Graphic Display of Heterogeneity&nbsp;(GOSH)&nbsp;</p>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.metafor-project.org">metafor</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">m.rma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://wviechtb.github.io/metafor/reference/rma.uni.html">rma</a></span><span class="op">(</span>yi <span class="op">=</span> <span class="va">m.gen</span><span class="op">$</span><span class="va">TE</span>,</span>
+<span>             sei <span class="op">=</span> <span class="va">m.gen</span><span class="op">$</span><span class="va">seTE</span>,</span>
+<span>             method <span class="op">=</span> <span class="va">m.gen</span><span class="op">$</span><span class="va">method.tau</span>,</span>
+<span>             test <span class="op">=</span> <span class="st">"knha"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res.gosh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://wviechtb.github.io/metafor/reference/gosh.html">gosh</a></span><span class="op">(</span><span class="va">m.rma</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">res.gosh</span>,file <span class="op">=</span> <span class="st">"data/res.gosh.RData"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/res.gosh.RData"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">res.gosh</span>, alpha <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="BetweenStudyHeterogeneity_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>GOSH 诊断图</p>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#' @usage gosh.diagnostics(data, km = TRUE, db = TRUE, gmm = TRUE,</span></span>
+<span><span class="co">#'                  km.params = list(centers = 3,</span></span>
+<span><span class="co">#'                                   iter.max = 10, nstart = 1,</span></span>
+<span><span class="co">#'                                   algorithm = c("Hartigan-Wong",</span></span>
+<span><span class="co">#'                                   "Lloyd", "Forgy","MacQueen"),</span></span>
+<span><span class="co">#'                                   trace = FALSE),</span></span>
+<span><span class="co">#'                  db.params = list(eps = 0.15, MinPts = 5,</span></span>
+<span><span class="co">#'                                   method = c("hybrid", "raw", "dist")),</span></span>
+<span><span class="co">#'                  gmm.params = list(G = NULL, modelNames = NULL,</span></span>
+<span><span class="co">#'                                    prior = NULL, control = emControl(),</span></span>
+<span><span class="co">#'                                    initialization = list(hcPairs = NULL,</span></span>
+<span><span class="co">#'                                    subset = NULL,</span></span>
+<span><span class="co">#'                                    noise = NULL),</span></span>
+<span><span class="co">#'                                    Vinv = NULL,</span></span>
+<span><span class="co">#'                                    warn = mclust.options("warn"),</span></span>
+<span><span class="co">#'                                    x = NULL, verbose = FALSE),</span></span>
+<span><span class="co">#'                  seed = 123,</span></span>
+<span><span class="co">#'                  verbose = TRUE)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res.gosh.diag</span> <span class="op">&lt;-</span> <span class="fu">dmetar</span><span class="fu">::</span><span class="fu"><a href="http://dmetar.protectlab.org/reference/gosh.diagnostics.html">gosh.diagnostics</a></span><span class="op">(</span><span class="va">res.gosh</span>, </span>
+<span>                                  km.params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>centers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                                  db.params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>eps <span class="op">=</span> <span class="fl">0.08</span>, </span>
+<span>                                                   MinPts <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"m.gosh"</span>,package <span class="op">=</span> <span class="st">"dmetar"</span><span class="op">)</span></span>
+<span><span class="va">res.diag</span> <span class="op">&lt;-</span><span class="fu">dmetar</span><span class="fu">::</span><span class="fu"><a href="http://dmetar.protectlab.org/reference/gosh.diagnostics.html">gosh.diagnostics</a></span><span class="op">(</span><span class="va">m.gosh</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   </span></span>
+<span><span class="co">#&gt;  Perform Clustering... </span></span>
+<span><span class="co">#&gt;  |==========================================================================================| DONE</span></span>
+<span><span class="va">res.diag</span> </span>
+<span><span class="co">#&gt; GOSH Diagnostics </span></span>
+<span><span class="co">#&gt; ================================ </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  - Number of K-means clusters detected: 3</span></span>
+<span><span class="co">#&gt;  - Number of DBSCAN clusters detected: 4</span></span>
+<span><span class="co">#&gt;  - Number of GMM clusters detected: 4</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Identification of potential outliers </span></span>
+<span><span class="co">#&gt;  --------------------------------- </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  - K-means: Study 3, Study 4</span></span>
+<span><span class="co">#&gt;  - DBSCAN: Study 3, Study 4</span></span>
+<span><span class="co">#&gt;  - Gaussian Mixture Model: Study 3</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">res.diag</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="BetweenStudyHeterogeneity_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="BetweenStudyHeterogeneity_files/figure-html/unnamed-chunk-21-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="BetweenStudyHeterogeneity_files/figure-html/unnamed-chunk-21-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="BetweenStudyHeterogeneity_files/figure-html/unnamed-chunk-21-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="BetweenStudyHeterogeneity_files/figure-html/unnamed-chunk-21-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/update.html">update</a></span><span class="op">(</span><span class="va">m.gen</span>, exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">16</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Review:     Third Wave Psychotherapies</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                           SMD            95%-CI %W(random) exclude</span></span>
+<span><span class="co">#&gt; Call et al.            0.7091 [ 0.1979; 1.2203]        4.6        </span></span>
+<span><span class="co">#&gt; Cavanagh et al.        0.3549 [-0.0300; 0.7397]        8.1        </span></span>
+<span><span class="co">#&gt; DanitzOrsillo          1.7912 [ 1.1139; 2.4685]        0.0       *</span></span>
+<span><span class="co">#&gt; de Vibe et al.         0.1825 [-0.0484; 0.4133]        0.0       *</span></span>
+<span><span class="co">#&gt; Frazier et al.         0.4219 [ 0.1380; 0.7057]       14.8        </span></span>
+<span><span class="co">#&gt; Frogeli et al.         0.6300 [ 0.2458; 1.0142]        8.1        </span></span>
+<span><span class="co">#&gt; Gallego et al.         0.7249 [ 0.2846; 1.1652]        6.2        </span></span>
+<span><span class="co">#&gt; Hazlett-Stevens &amp; Oren 0.5287 [ 0.1162; 0.9412]        7.0        </span></span>
+<span><span class="co">#&gt; Hintz et al.           0.2840 [-0.0453; 0.6133]       11.0        </span></span>
+<span><span class="co">#&gt; Kang et al.            1.2751 [ 0.6142; 1.9360]        2.7        </span></span>
+<span><span class="co">#&gt; Kuhlmann et al.        0.1036 [-0.2781; 0.4853]        8.2        </span></span>
+<span><span class="co">#&gt; Lever Taylor et al.    0.3884 [-0.0639; 0.8407]        5.8        </span></span>
+<span><span class="co">#&gt; Phang et al.           0.5407 [ 0.0619; 1.0196]        5.2        </span></span>
+<span><span class="co">#&gt; Rasanen et al.         0.4262 [-0.0794; 0.9317]        4.7        </span></span>
+<span><span class="co">#&gt; Ratanasiripong         0.5154 [-0.1731; 1.2039]        2.5        </span></span>
+<span><span class="co">#&gt; Shapiro et al.         1.4797 [ 0.8618; 2.0977]        0.0       *</span></span>
+<span><span class="co">#&gt; Song &amp; Lindquist       0.6126 [ 0.1683; 1.0569]        6.1        </span></span>
+<span><span class="co">#&gt; Warnecke et al.        0.6000 [ 0.1120; 1.0880]        5.0        </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Number of studies: k = 15</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                              SMD           95%-CI    t  p-value</span></span>
+<span><span class="co">#&gt; Random effects model (HK) 0.4819 [0.3595; 0.6043] 8.44 &lt; 0.0001</span></span>
+<span><span class="co">#&gt; Prediction interval              [0.3623; 0.6016]              </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Quantifying heterogeneity (with 95%-CIs):</span></span>
+<span><span class="co">#&gt;  tau^2 &lt; 0.0001 [0.0000; 0.0955]; tau = 0.0012 [0.0000; 0.3091]</span></span>
+<span><span class="co">#&gt;  I^2 = 4.6% [0.0%; 55.7%]; H = 1.02 [1.00; 1.50]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test of heterogeneity:</span></span>
+<span><span class="co">#&gt;      Q d.f. p-value</span></span>
+<span><span class="co">#&gt;  14.67   14  0.4011</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Details of meta-analysis methods:</span></span>
+<span><span class="co">#&gt; - Inverse variance method</span></span>
+<span><span class="co">#&gt; - Restricted maximum-likelihood estimator for tau^2</span></span>
+<span><span class="co">#&gt; - Q-Profile method for confidence interval of tau^2 and tau</span></span>
+<span><span class="co">#&gt; - Calculation of I^2 based on Q</span></span>
+<span><span class="co">#&gt; - Hartung-Knapp adjustment for random effects model (df = 14)</span></span>
+<span><span class="co">#&gt; - Prediction interval based on t-distribution (df = 14)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+
+
+<!-- -->
+
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./pooling_effect_sizes.html" class="pagination-link" aria-label="pooling effect sizes">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">pooling effect sizes</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./forest_plots.html" class="pagination-link" aria-label="可视化">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">可视化</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb25" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "研究间异质性"</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>Between-Study Heterogeneity $\zeta_k$</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Cochran's Q</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>Cochran's Q定义为每一项研究与总体效应的偏差**加权平方和** （weighted sum of squares, WSS）。</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>Q=\sum_{k=1}^K \omega_k(\hat \theta_k - \hat\theta)^2</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>当研究之间没有异质性即$\zeta_k =0$ 仅有抽样误差，假设</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>\hat\theta_k-\hat\theta\sim N(0,1)</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># needed to reproduce results</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">40</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>error_fixed <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n =</span> <span class="dv">10000</span>, <span class="fu">rnorm</span>(<span class="dv">40</span>))</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(error_fixed, </span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(<span class="fu">hat</span>(theta[k])<span class="sc">~-</span><span class="er">~</span><span class="fu">hat</span>(theta)), <span class="at">prob =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>     <span class="at">breaks =</span> <span class="dv">100</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, .<span class="dv">45</span>), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>,<span class="dv">4</span>),</span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"No Heterogeneity"</span>)</span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="fl">0.01</span>), <span class="fu">dnorm</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="fl">0.01</span>)), </span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>假设研究之间存在异质性&nbsp;（$\zeta_k$）和抽样误差（$\epsilon_k$）</span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a>error_random <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n =</span> <span class="dv">10000</span>, <span class="fu">rnorm</span>(<span class="dv">40</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">40</span>))</span>
+<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(error_random, </span>
+<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(<span class="fu">hat</span>(theta[k])<span class="sc">~-</span><span class="er">~</span><span class="fu">hat</span>(theta)), <span class="at">prob =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a>     <span class="at">breaks =</span> <span class="dv">100</span>,<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, .<span class="dv">45</span>), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>,<span class="dv">4</span>),</span>
+<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Heterogeneity"</span>)</span>
+<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="fl">0.01</span>), <span class="fu">dnorm</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="fl">0.01</span>)), </span>
+<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a>计算Q，假设加权=1</span>
+<span id="cb25-58"><a href="#cb25-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-61"><a href="#cb25-61" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-62"><a href="#cb25-62" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb25-63"><a href="#cb25-63" aria-hidden="true" tabindex="-1"></a>Q_fixed <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">sum</span>(<span class="fu">rnorm</span>(<span class="dv">40</span>)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb25-64"><a href="#cb25-64" aria-hidden="true" tabindex="-1"></a>Q_random <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">sum</span>((<span class="fu">rnorm</span>(<span class="dv">40</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">40</span>))<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb25-65"><a href="#cb25-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-66"><a href="#cb25-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-67"><a href="#cb25-67" aria-hidden="true" tabindex="-1"></a>自由度为K−1的卡方分布（其中K是我们荟萃分析中的研究数量）</span>
+<span id="cb25-68"><a href="#cb25-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-71"><a href="#cb25-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-72"><a href="#cb25-72" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="dv">40-1</span></span>
+<span id="cb25-73"><a href="#cb25-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-74"><a href="#cb25-74" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Q_fixed, <span class="at">xlab =</span> <span class="fu">expression</span>(<span class="fu">italic</span>(<span class="st">"Q"</span>)), <span class="at">prob =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb25-75"><a href="#cb25-75" aria-hidden="true" tabindex="-1"></a>     <span class="at">breaks =</span> <span class="dv">100</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, .<span class="dv">06</span>),<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">160</span>),</span>
+<span id="cb25-76"><a href="#cb25-76" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"No Heterogeneity"</span>)</span>
+<span id="cb25-77"><a href="#cb25-77" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="fl">0.01</span>), <span class="fu">dchisq</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="fl">0.01</span>), <span class="at">df =</span> df), </span>
+<span id="cb25-78"><a href="#cb25-78" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb25-79"><a href="#cb25-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-80"><a href="#cb25-80" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(Q_random,  <span class="at">xlab =</span> <span class="fu">expression</span>(<span class="fu">italic</span>(<span class="st">"Q"</span>)), <span class="at">prob =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb25-81"><a href="#cb25-81" aria-hidden="true" tabindex="-1"></a>     <span class="at">breaks =</span> <span class="dv">100</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, .<span class="dv">06</span>), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">160</span>),</span>
+<span id="cb25-82"><a href="#cb25-82" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Heterogeneity"</span>)</span>
+<span id="cb25-83"><a href="#cb25-83" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="fl">0.01</span>), <span class="fu">dchisq</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="fl">0.01</span>), <span class="at">df =</span> df), </span>
+<span id="cb25-84"><a href="#cb25-84" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb25-85"><a href="#cb25-85" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-86"><a href="#cb25-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-87"><a href="#cb25-87" aria-hidden="true" tabindex="-1"></a><span class="fu">## **Higgins &amp; Thompson’s** $I^2$Statistic</span></span>
+<span id="cb25-88"><a href="#cb25-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-89"><a href="#cb25-89" aria-hidden="true" tabindex="-1"></a>$I^2$ 是另一种估计异质性的方法，基于Cochran's Q。 它被定义为不是由抽样误差引起的效应量的变异百分比</span>
+<span id="cb25-90"><a href="#cb25-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-91"><a href="#cb25-91" aria-hidden="true" tabindex="-1"></a>$I^2$ 基于以下假设：在无异质性的零假设下，Q遵循具有K-1自由度的χ2分布。它以百分比的形式量化了在没有异质性（即K-1）的情况下，观察到的Q值超过预期Q值的程度。</span>
+<span id="cb25-92"><a href="#cb25-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-93"><a href="#cb25-93" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb25-94"><a href="#cb25-94" aria-hidden="true" tabindex="-1"></a>I^2=\frac{Q-(K-1)}{Q}</span>
+<span id="cb25-95"><a href="#cb25-95" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb25-96"><a href="#cb25-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-97"><a href="#cb25-97" aria-hidden="true" tabindex="-1"></a>I2的值不能低于0%，因此如果Q恰好小于K-1，我们只需使用0而不是负值</span>
+<span id="cb25-98"><a href="#cb25-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-101"><a href="#cb25-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-102"><a href="#cb25-102" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the value of the 10th simulation of Q</span></span>
+<span id="cb25-103"><a href="#cb25-103" aria-hidden="true" tabindex="-1"></a>Q_fixed[<span class="dv">10</span>]</span>
+<span id="cb25-104"><a href="#cb25-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-105"><a href="#cb25-105" aria-hidden="true" tabindex="-1"></a><span class="co"># Define k</span></span>
+<span id="cb25-106"><a href="#cb25-106" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">40</span></span>
+<span id="cb25-107"><a href="#cb25-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-108"><a href="#cb25-108" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate I^2</span></span>
+<span id="cb25-109"><a href="#cb25-109" aria-hidden="true" tabindex="-1"></a>(Q_fixed[<span class="dv">10</span>] <span class="sc">-</span> (k<span class="dv">-1</span>))<span class="sc">/</span>Q_fixed[<span class="dv">10</span>]</span>
+<span id="cb25-110"><a href="#cb25-110" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-111"><a href="#cb25-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-112"><a href="#cb25-112" aria-hidden="true" tabindex="-1"></a>$I^2$&nbsp;= 0% 说明效应量的0%是由研究间的异质性引起的</span>
+<span id="cb25-113"><a href="#cb25-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-116"><a href="#cb25-116" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-117"><a href="#cb25-117" aria-hidden="true" tabindex="-1"></a>(Q_random[<span class="dv">10</span>] <span class="sc">-</span> (k<span class="dv">-1</span>))<span class="sc">/</span>Q_random[<span class="dv">10</span>]</span>
+<span id="cb25-118"><a href="#cb25-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-119"><a href="#cb25-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-120"><a href="#cb25-120" aria-hidden="true" tabindex="-1"></a>大约一半的差异是由于研究之间的异质性造成的。这也符合我们的预期，因为此示例中的变异同等程度地基于模拟的抽样误差和研究之间的异质性。</span>
+<span id="cb25-121"><a href="#cb25-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-122"><a href="#cb25-122" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I2 = 25%: low heterogeneity</span>
+<span id="cb25-123"><a href="#cb25-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-124"><a href="#cb25-124" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I2 = 50%: moderate heterogeneity</span>
+<span id="cb25-125"><a href="#cb25-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-126"><a href="#cb25-126" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I2 = 75%: substantial heterogeneity.</span>
+<span id="cb25-127"><a href="#cb25-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-128"><a href="#cb25-128" aria-hidden="true" tabindex="-1"></a><span class="fu">## $H^2$&nbsp;statistic</span></span>
+<span id="cb25-129"><a href="#cb25-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-130"><a href="#cb25-130" aria-hidden="true" tabindex="-1"></a>它描述了由Q测量的观察到的变化与由于采样误差引起的预期变化的比率</span>
+<span id="cb25-131"><a href="#cb25-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-132"><a href="#cb25-132" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb25-133"><a href="#cb25-133" aria-hidden="true" tabindex="-1"></a>H^2=\frac{Q}{K-1}</span>
+<span id="cb25-134"><a href="#cb25-134" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb25-135"><a href="#cb25-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-136"><a href="#cb25-136" aria-hidden="true" tabindex="-1"></a>当研究之间没有异质性时，H2等于1（或更小）。大于1的值表示研究之间存在异质性。</span>
+<span id="cb25-137"><a href="#cb25-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-138"><a href="#cb25-138" aria-hidden="true" tabindex="-1"></a><span class="fu">## **Heterogeneity Variance** $\tau^2$&amp; Standard Deviation $\tau$</span></span>
+<span id="cb25-139"><a href="#cb25-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-142"><a href="#cb25-142" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-143"><a href="#cb25-143" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(meta)</span>
+<span id="cb25-144"><a href="#cb25-144" aria-hidden="true" tabindex="-1"></a>m.gen <span class="ot">&lt;-</span> <span class="fu">metagen</span>(<span class="at">TE =</span> TE,</span>
+<span id="cb25-145"><a href="#cb25-145" aria-hidden="true" tabindex="-1"></a>                 <span class="at">seTE =</span> seTE,</span>
+<span id="cb25-146"><a href="#cb25-146" aria-hidden="true" tabindex="-1"></a>                 <span class="at">studlab =</span> Author,</span>
+<span id="cb25-147"><a href="#cb25-147" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> dmetar<span class="sc">::</span>ThirdWave,</span>
+<span id="cb25-148"><a href="#cb25-148" aria-hidden="true" tabindex="-1"></a>                 <span class="at">sm =</span> <span class="st">"SMD"</span>,</span>
+<span id="cb25-149"><a href="#cb25-149" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fixed =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb25-150"><a href="#cb25-150" aria-hidden="true" tabindex="-1"></a>                 <span class="at">random =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb25-151"><a href="#cb25-151" aria-hidden="true" tabindex="-1"></a>                 <span class="at">method.tau =</span> <span class="st">"REML"</span>,</span>
+<span id="cb25-152"><a href="#cb25-152" aria-hidden="true" tabindex="-1"></a>                 <span class="at">method.random.ci =</span> <span class="st">"HK"</span>,</span>
+<span id="cb25-153"><a href="#cb25-153" aria-hidden="true" tabindex="-1"></a>                 <span class="at">title =</span> <span class="st">"Third Wave Psychotherapies"</span>)</span>
+<span id="cb25-154"><a href="#cb25-154" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-155"><a href="#cb25-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-158"><a href="#cb25-158" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-159"><a href="#cb25-159" aria-hidden="true" tabindex="-1"></a><span class="co"># Pooled effect</span></span>
+<span id="cb25-160"><a href="#cb25-160" aria-hidden="true" tabindex="-1"></a>m.gen<span class="sc">$</span>TE.random</span>
+<span id="cb25-161"><a href="#cb25-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-162"><a href="#cb25-162" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate of tau</span></span>
+<span id="cb25-163"><a href="#cb25-163" aria-hidden="true" tabindex="-1"></a>m.gen<span class="sc">$</span>tau</span>
+<span id="cb25-164"><a href="#cb25-164" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-165"><a href="#cb25-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-166"><a href="#cb25-166" aria-hidden="true" tabindex="-1"></a>我们看到了g=0.58 和τ=0.29. 根据这些数据，我们可以计算出 95% 真实效应量置信区间的下限和上限：0.58−1.96×0.29 = 0.01 和 0.58 1.96+×0.29 = 1.15。</span>
+<span id="cb25-167"><a href="#cb25-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-168"><a href="#cb25-168" aria-hidden="true" tabindex="-1"></a><span class="fu">## Prediction intervals&nbsp;(PIs)&nbsp;</span></span>
+<span id="cb25-169"><a href="#cb25-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-170"><a href="#cb25-170" aria-hidden="true" tabindex="-1"></a>95% 预测区间的公式如下所示：</span>
+<span id="cb25-171"><a href="#cb25-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-172"><a href="#cb25-172" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/clipboard-3273423715.png)</span>{fig-align="center"}</span>
+<span id="cb25-173"><a href="#cb25-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-176"><a href="#cb25-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-177"><a href="#cb25-177" aria-hidden="true" tabindex="-1"></a>m.gen <span class="ot">&lt;-</span> <span class="fu">update</span>(m.gen, <span class="at">prediction =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb25-178"><a href="#cb25-178" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m.gen)</span>
+<span id="cb25-179"><a href="#cb25-179" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-180"><a href="#cb25-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-181"><a href="#cb25-181" aria-hidden="true" tabindex="-1"></a>在合并效应的直接作用下，我们看到了预测区间。其范围为g=-0.06至1.21。这意味着，根据目前的证据，未来的一些研究可能会发现负面的治疗效果。然而，间隔相当宽，这意味着也可能产生非常高的效果。</span>
+<span id="cb25-182"><a href="#cb25-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-183"><a href="#cb25-183" aria-hidden="true" tabindex="-1"></a><span class="fu">## **异常值**</span></span>
+<span id="cb25-184"><a href="#cb25-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-185"><a href="#cb25-185" aria-hidden="true" tabindex="-1"></a><span class="fu">### 删除</span></span>
+<span id="cb25-186"><a href="#cb25-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-189"><a href="#cb25-189" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-190"><a href="#cb25-190" aria-hidden="true" tabindex="-1"></a>dmetar<span class="sc">::</span><span class="fu">find.outliers</span>(m.gen)</span>
+<span id="cb25-191"><a href="#cb25-191" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-192"><a href="#cb25-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-193"><a href="#cb25-193" aria-hidden="true" tabindex="-1"></a><span class="fu">### 影响分析</span></span>
+<span id="cb25-194"><a href="#cb25-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-197"><a href="#cb25-197" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-198"><a href="#cb25-198" aria-hidden="true" tabindex="-1"></a>m.gen.inf <span class="ot">&lt;-</span> dmetar<span class="sc">::</span><span class="fu">InfluenceAnalysis</span>(m.gen, <span class="at">random =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb25-199"><a href="#cb25-199" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-200"><a href="#cb25-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-203"><a href="#cb25-203" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-204"><a href="#cb25-204" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(m.gen.inf, <span class="st">"baujat"</span>)</span>
+<span id="cb25-205"><a href="#cb25-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-206"><a href="#cb25-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-209"><a href="#cb25-209" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-210"><a href="#cb25-210" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(m.gen.inf, <span class="st">"influence"</span>)</span>
+<span id="cb25-211"><a href="#cb25-211" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-212"><a href="#cb25-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-215"><a href="#cb25-215" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-216"><a href="#cb25-216" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(m.gen.inf, <span class="st">"es"</span>)</span>
+<span id="cb25-217"><a href="#cb25-217" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(m.gen.inf, <span class="st">"i2"</span>)</span>
+<span id="cb25-218"><a href="#cb25-218" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-219"><a href="#cb25-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-220"><a href="#cb25-220" aria-hidden="true" tabindex="-1"></a><span class="fu">### **GOSH Plot Analysis**</span></span>
+<span id="cb25-221"><a href="#cb25-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-222"><a href="#cb25-222" aria-hidden="true" tabindex="-1"></a>Graphic Display of Heterogeneity&nbsp;(GOSH)&nbsp;</span>
+<span id="cb25-223"><a href="#cb25-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-226"><a href="#cb25-226" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-227"><a href="#cb25-227" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(metafor)</span>
+<span id="cb25-228"><a href="#cb25-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-229"><a href="#cb25-229" aria-hidden="true" tabindex="-1"></a>m.rma <span class="ot">&lt;-</span> <span class="fu">rma</span>(<span class="at">yi =</span> m.gen<span class="sc">$</span>TE,</span>
+<span id="cb25-230"><a href="#cb25-230" aria-hidden="true" tabindex="-1"></a>             <span class="at">sei =</span> m.gen<span class="sc">$</span>seTE,</span>
+<span id="cb25-231"><a href="#cb25-231" aria-hidden="true" tabindex="-1"></a>             <span class="at">method =</span> m.gen<span class="sc">$</span>method.tau,</span>
+<span id="cb25-232"><a href="#cb25-232" aria-hidden="true" tabindex="-1"></a>             <span class="at">test =</span> <span class="st">"knha"</span>)</span>
+<span id="cb25-233"><a href="#cb25-233" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-234"><a href="#cb25-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-235"><a href="#cb25-235" aria-hidden="true" tabindex="-1"></a><span class="in">```{r eval=FALSE}</span></span>
+<span id="cb25-236"><a href="#cb25-236" aria-hidden="true" tabindex="-1"></a><span class="in">res.gosh &lt;- gosh(m.rma)</span></span>
+<span id="cb25-237"><a href="#cb25-237" aria-hidden="true" tabindex="-1"></a><span class="in">save(res.gosh,file = "data/res.gosh.RData")</span></span>
+<span id="cb25-238"><a href="#cb25-238" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-239"><a href="#cb25-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-242"><a href="#cb25-242" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-243"><a href="#cb25-243" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/res.gosh.RData"</span>)</span>
+<span id="cb25-244"><a href="#cb25-244" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res.gosh, <span class="at">alpha =</span> <span class="fl">0.01</span>)</span>
+<span id="cb25-245"><a href="#cb25-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-246"><a href="#cb25-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-247"><a href="#cb25-247" aria-hidden="true" tabindex="-1"></a>GOSH 诊断图</span>
+<span id="cb25-248"><a href="#cb25-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-251"><a href="#cb25-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-252"><a href="#cb25-252" aria-hidden="true" tabindex="-1"></a><span class="co">#' @usage gosh.diagnostics(data, km = TRUE, db = TRUE, gmm = TRUE,</span></span>
+<span id="cb25-253"><a href="#cb25-253" aria-hidden="true" tabindex="-1"></a><span class="co">#'                  km.params = list(centers = 3,</span></span>
+<span id="cb25-254"><a href="#cb25-254" aria-hidden="true" tabindex="-1"></a><span class="co">#'                                   iter.max = 10, nstart = 1,</span></span>
+<span id="cb25-255"><a href="#cb25-255" aria-hidden="true" tabindex="-1"></a><span class="co">#'                                   algorithm = c("Hartigan-Wong",</span></span>
+<span id="cb25-256"><a href="#cb25-256" aria-hidden="true" tabindex="-1"></a><span class="co">#'                                   "Lloyd", "Forgy","MacQueen"),</span></span>
+<span id="cb25-257"><a href="#cb25-257" aria-hidden="true" tabindex="-1"></a><span class="co">#'                                   trace = FALSE),</span></span>
+<span id="cb25-258"><a href="#cb25-258" aria-hidden="true" tabindex="-1"></a><span class="co">#'                  db.params = list(eps = 0.15, MinPts = 5,</span></span>
+<span id="cb25-259"><a href="#cb25-259" aria-hidden="true" tabindex="-1"></a><span class="co">#'                                   method = c("hybrid", "raw", "dist")),</span></span>
+<span id="cb25-260"><a href="#cb25-260" aria-hidden="true" tabindex="-1"></a><span class="co">#'                  gmm.params = list(G = NULL, modelNames = NULL,</span></span>
+<span id="cb25-261"><a href="#cb25-261" aria-hidden="true" tabindex="-1"></a><span class="co">#'                                    prior = NULL, control = emControl(),</span></span>
+<span id="cb25-262"><a href="#cb25-262" aria-hidden="true" tabindex="-1"></a><span class="co">#'                                    initialization = list(hcPairs = NULL,</span></span>
+<span id="cb25-263"><a href="#cb25-263" aria-hidden="true" tabindex="-1"></a><span class="co">#'                                    subset = NULL,</span></span>
+<span id="cb25-264"><a href="#cb25-264" aria-hidden="true" tabindex="-1"></a><span class="co">#'                                    noise = NULL),</span></span>
+<span id="cb25-265"><a href="#cb25-265" aria-hidden="true" tabindex="-1"></a><span class="co">#'                                    Vinv = NULL,</span></span>
+<span id="cb25-266"><a href="#cb25-266" aria-hidden="true" tabindex="-1"></a><span class="co">#'                                    warn = mclust.options("warn"),</span></span>
+<span id="cb25-267"><a href="#cb25-267" aria-hidden="true" tabindex="-1"></a><span class="co">#'                                    x = NULL, verbose = FALSE),</span></span>
+<span id="cb25-268"><a href="#cb25-268" aria-hidden="true" tabindex="-1"></a><span class="co">#'                  seed = 123,</span></span>
+<span id="cb25-269"><a href="#cb25-269" aria-hidden="true" tabindex="-1"></a><span class="co">#'                  verbose = TRUE)</span></span>
+<span id="cb25-270"><a href="#cb25-270" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-271"><a href="#cb25-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-272"><a href="#cb25-272" aria-hidden="true" tabindex="-1"></a><span class="in">```{r eval=FALSE}</span></span>
+<span id="cb25-273"><a href="#cb25-273" aria-hidden="true" tabindex="-1"></a><span class="in">res.gosh.diag &lt;- dmetar::gosh.diagnostics(res.gosh, </span></span>
+<span id="cb25-274"><a href="#cb25-274" aria-hidden="true" tabindex="-1"></a><span class="in">                                  km.params = list(centers = 2),</span></span>
+<span id="cb25-275"><a href="#cb25-275" aria-hidden="true" tabindex="-1"></a><span class="in">                                  db.params = list(eps = 0.08, </span></span>
+<span id="cb25-276"><a href="#cb25-276" aria-hidden="true" tabindex="-1"></a><span class="in">                                                   MinPts = 50))</span></span>
+<span id="cb25-277"><a href="#cb25-277" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-278"><a href="#cb25-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-281"><a href="#cb25-281" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-282"><a href="#cb25-282" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"m.gosh"</span>,<span class="at">package =</span> <span class="st">"dmetar"</span>)</span>
+<span id="cb25-283"><a href="#cb25-283" aria-hidden="true" tabindex="-1"></a>res.diag <span class="ot">&lt;-</span>dmetar<span class="sc">::</span><span class="fu">gosh.diagnostics</span>(m.gosh)</span>
+<span id="cb25-284"><a href="#cb25-284" aria-hidden="true" tabindex="-1"></a>res.diag </span>
+<span id="cb25-285"><a href="#cb25-285" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res.diag)</span>
+<span id="cb25-286"><a href="#cb25-286" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-287"><a href="#cb25-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-290"><a href="#cb25-290" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-291"><a href="#cb25-291" aria-hidden="true" tabindex="-1"></a><span class="fu">update</span>(m.gen, <span class="at">exclude =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">16</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-292"><a href="#cb25-292" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span>
+<span id="cb25-293"><a href="#cb25-293" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+</body></html>

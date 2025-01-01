@@ -1,0 +1,26 @@
+{
+  "index.qmd": {
+    "index.html": "c4e55ea3"
+  },
+  "effect_sizes.qmd": {
+    "effect_sizes.html": "2e43d06e"
+  },
+  "pooling_effect_sizes.qmd": {
+    "pooling_effect_sizes.html": "9b70a480"
+  },
+  "BetweenStudyHeterogeneity.qmd": {
+    "BetweenStudyHeterogeneity.html": "c3470017"
+  },
+  "forest_plots.qmd": {
+    "forest_plots.html": "8b977824"
+  },
+  "SubgroupAnalysis.qmd": {
+    "SubgroupAnalysis.html": "352fc7e4"
+  },
+  "Meta_Regression.qmd": {
+    "Meta_Regression.html": "6130ffa3"
+  },
+  "PublicationBias.qmd": {
+    "PublicationBias.html": "d63f750c"
+  }
+}
