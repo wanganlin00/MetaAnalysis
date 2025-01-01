@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Meta Analysis</title>
+<title>7&nbsp; 发表偏倚 – Meta Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./effect_sizes.html" rel="next">
+<link href="./Meta_Regression.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -114,7 +114,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">推荐阅读</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./PublicationBias.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">发表偏倚</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -148,7 +148,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">推荐阅读</span></a>
   </div>
 </li>
@@ -190,7 +190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./PublicationBias.html" class="sidebar-item-text sidebar-link">
+  <a href="./PublicationBias.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">发表偏倚</span></span></a>
   </div>
 </li>
@@ -204,7 +204,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#推荐阅读" id="toc-推荐阅读" class="nav-link active" data-scroll-target="#推荐阅读">推荐阅读</a></li>
+  <li><a href="#小规模研究效应法" id="toc-小规模研究效应法" class="nav-link active" data-scroll-target="#小规模研究效应法"><span class="header-section-number">7.1</span> <strong>小规模研究效应法</strong></a>
+  <ul>
+  <li><a href="#漏斗图" id="toc-漏斗图" class="nav-link" data-scroll-target="#漏斗图"><span class="header-section-number">7.1.0.1</span> <strong>漏斗图</strong></a></li>
+  </ul></li>
+  <li><a href="#p-曲线" id="toc-p-曲线" class="nav-link" data-scroll-target="#p-曲线"><span class="header-section-number">7.2</span> <strong>P 曲线</strong></a></li>
+  <li><a href="#选择模型" id="toc-选择模型" class="nav-link" data-scroll-target="#选择模型"><span class="header-section-number">7.3</span> <strong>选择模型</strong></a></li>
   </ul>
 </nav>
     </div>
@@ -213,7 +218,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Meta Analysis</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">发表偏倚</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -230,11 +235,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="推荐阅读" class="level1 unnumbered">
-<h1 class="unnumbered">推荐阅读</h1>
-<ol type="1">
-<li><a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/">Doing Meta-Analysis in R: A Hands-on Guide</a></li>
-</ol>
+<section id="小规模研究效应法" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="小规模研究效应法"><span class="header-section-number">7.1</span> <strong>小规模研究效应法</strong></h2>
+<section id="漏斗图" class="level4" data-number="7.1.0.1">
+<h4 data-number="7.1.0.1" class="anchored" data-anchor-id="漏斗图"><span class="header-section-number">7.1.0.1</span> <strong>漏斗图</strong></h4>
+</section>
+</section>
+<section id="p-曲线" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="p-曲线"><span class="header-section-number">7.2</span> <strong>P 曲线</strong></h2>
+</section>
+<section id="选择模型" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="选择模型"><span class="header-section-number">7.3</span> <strong>选择模型</strong></h2>
 
 
 <!-- -->
@@ -715,16 +726,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./Meta_Regression.html" class="pagination-link" aria-label="Meta 回归">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Meta 回归</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./effect_sizes.html" class="pagination-link" aria-label="效应大小">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">效应大小</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># 推荐阅读 {.unnumbered}</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span><span class="co">[</span><span class="ot">Doing Meta-Analysis in R: A Hands-on Guide</span><span class="co">](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/)</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "发表偏倚"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## **小规模研究效应法**</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">#### **漏斗图**</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## **P 曲线**</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">## **选择模型**</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

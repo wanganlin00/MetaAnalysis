@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.32">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>6&nbsp; Meta 回归 – Meta Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./PublicationBias.html" rel="next">
+<link href="./SubgroupAnalysis.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-64b801fe9b6685c0a799f7172ecad621.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+</head>
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Meta_Regression.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Meta 回归</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Meta Analysis</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">推荐阅读</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./effect_sizes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">效应大小</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pooling_effect_sizes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">pooling effect sizes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./BetweenStudyHeterogeneity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">研究间异质性</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./forest_plots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">可视化</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./SubgroupAnalysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">亚组分析</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Meta_Regression.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Meta 回归</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./PublicationBias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">发表偏倚</span></span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li>
+<a href="#meta%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B" id="toc-meta回归模型" class="nav-link active" data-scroll-target="#meta%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B"><span class="header-section-number">6.1</span> Meta回归模型</a>
+  <ul>
+<li><a href="#%E4%BD%BF%E7%94%A8%E5%88%86%E7%B1%BB%E9%A2%84%E6%B5%8B%E5%9B%A0%E5%AD%90%E7%9A%84meta%E5%9B%9E%E5%BD%92" id="toc-使用分类预测因子的meta回归" class="nav-link" data-scroll-target="#%E4%BD%BF%E7%94%A8%E5%88%86%E7%B1%BB%E9%A2%84%E6%B5%8B%E5%9B%A0%E5%AD%90%E7%9A%84meta%E5%9B%9E%E5%BD%92"><span class="header-section-number">6.1.1</span> <strong>使用分类预测因子的meta回归</strong></a></li>
+  <li><a href="#%E4%BD%BF%E7%94%A8%E8%BF%9E%E7%BB%AD%E9%A2%84%E6%B5%8B%E5%9B%A0%E5%AD%90%E7%9A%84meta%E5%9B%9E%E5%BD%92" id="toc-使用连续预测因子的meta回归" class="nav-link" data-scroll-target="#%E4%BD%BF%E7%94%A8%E8%BF%9E%E7%BB%AD%E9%A2%84%E6%B5%8B%E5%9B%A0%E5%AD%90%E7%9A%84meta%E5%9B%9E%E5%BD%92"><span class="header-section-number">6.1.2</span> <strong>使用连续预测因子的meta回归</strong></a></li>
+  </ul>
+</li>
+  <li>
+<a href="#%E5%A4%9A%E5%85%83%E5%9B%9E%E5%BD%92" id="toc-多元回归" class="nav-link" data-scroll-target="#%E5%A4%9A%E5%85%83%E5%9B%9E%E5%BD%92"><span class="header-section-number">6.2</span> <strong>多元回归</strong></a>
+  <ul>
+<li><a href="#%E5%A4%9A%E9%87%8D%E5%85%B1%E7%BA%BF%E6%80%A7" id="toc-多重共线性" class="nav-link" data-scroll-target="#%E5%A4%9A%E9%87%8D%E5%85%B1%E7%BA%BF%E6%80%A7"><span class="header-section-number">6.2.1</span> 多重共线性</a></li>
+  <li><a href="#%E4%BA%A4%E4%BA%92%E6%95%88%E5%BA%94" id="toc-交互效应" class="nav-link" data-scroll-target="#%E4%BA%A4%E4%BA%92%E6%95%88%E5%BA%94"><span class="header-section-number">6.2.2</span> 交互效应</a></li>
+  <li><a href="#%E8%BF%87%E6%8B%9F%E5%90%88" id="toc-过拟合" class="nav-link" data-scroll-target="#%E8%BF%87%E6%8B%9F%E5%90%88"><span class="header-section-number">6.2.3</span> 过拟合</a></li>
+  <li><a href="#%E6%8E%92%E5%88%97%E6%B5%8B%E8%AF%95" id="toc-排列测试" class="nav-link" data-scroll-target="#%E6%8E%92%E5%88%97%E6%B5%8B%E8%AF%95"><span class="header-section-number">6.2.4</span> 排列测试</a></li>
+  <li><a href="#%E5%A4%9A%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86" id="toc-多模型推理" class="nav-link" data-scroll-target="#%E5%A4%9A%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86"><span class="header-section-number">6.2.5</span> 多模型推理</a></li>
+  </ul>
+</li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">
+<span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Meta 回归</span>
+</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><p>Meta-regression 通过假设混合效应模型来实现。由于抽样误差和研究之间的异质性，观察到的研究偏离了真实的总体效应。</p>
+<p>普通最小二乘法的加权版本</p>
+<p>meta 回归 使用一个或多个变量x来预测真实效应大小的差异。</p>
+<p><span class="math display">\[
+\hat\theta_k = \theta + \beta x_{k} + \epsilon_k+\zeta_k
+\]</span></p>
+<p>抽样误差<span class="math inline">\(\epsilon_k\)</span>和研究间异质性 <span class="math inline">\(\zeta_k\)</span></p>
+<p>固定效应（<span class="math inline">\(\beta\)</span>）和 随机效应（<span class="math inline">\(\zeta_k\)</span>）</p>
+<section id="meta回归模型" class="level2" data-number="6.1"><h2 data-number="6.1" class="anchored" data-anchor-id="meta回归模型">
+<span class="header-section-number">6.1</span> Meta回归模型</h2>
+<section id="使用分类预测因子的meta回归" class="level3" data-number="6.1.1"><h3 data-number="6.1.1" class="anchored" data-anchor-id="使用分类预测因子的meta回归">
+<span class="header-section-number">6.1.1</span> <strong>使用分类预测因子的meta回归</strong>
+</h3>
+<p><span class="math display">\[
+\begin{equation}   
+D_g=\begin{cases}     
+0: &amp; \text{Subgroup A}\\     
+1: &amp; \text{Subgroup B.}   
+\end{cases}   
+\end{equation}
+\]</span></p>
+<p><span class="math display">\[
+\begin{equation} \hat\theta_k = \theta + \beta D_g +\epsilon_k+\zeta_k.  \end{equation}
+\]</span></p>
+<p>则</p>
+<p><span class="math display">\[
+\begin{equation}   D_g=\begin{cases}     0: &amp; \text{$\hat\theta_k = \theta_A + \epsilon_k+\zeta_k$}\\     1: &amp; \text{$\hat\theta_k = \theta_B + \theta_{\Delta} +\epsilon_k+\zeta_k$}   \end{cases}   \end{equation}
+\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="images/metaregression_subgroups.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="419"></p>
+</figure>
+</div>
+</section><section id="使用连续预测因子的meta回归" class="level3" data-number="6.1.2"><h3 data-number="6.1.2" class="anchored" data-anchor-id="使用连续预测因子的meta回归">
+<span class="header-section-number">6.1.2</span> <strong>使用连续预测因子的meta回归</strong>
+</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="images/metareg_form_continuous.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="293"></p>
+</figure>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/guido-s/meta/">meta</a></span><span class="op">)</span></span>
+<span><span class="va">m.gen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/meta/man/metagen.html">metagen</a></span><span class="op">(</span>TE <span class="op">=</span> <span class="va">TE</span>,</span>
+<span>                 seTE <span class="op">=</span> <span class="va">seTE</span>,</span>
+<span>                 studlab <span class="op">=</span> <span class="va">Author</span>,</span>
+<span>                 data <span class="op">=</span> <span class="fu">dmetar</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/dmetar/man/ThirdWave.html">ThirdWave</a></span>,</span>
+<span>                 sm <span class="op">=</span> <span class="st">"SMD"</span>,</span>
+<span>                 fixed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                 random <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                 method.tau <span class="op">=</span> <span class="st">"REML"</span>,</span>
+<span>                 method.random.ci <span class="op">=</span> <span class="st">"HK"</span>,</span>
+<span>                 prediction <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                 title <span class="op">=</span> <span class="st">"Third Wave Psychotherapies"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m.gen</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Review:     Third Wave Psychotherapies</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                           SMD            95%-CI %W(random)</span></span>
+<span><span class="co">#&gt; Call et al.            0.7091 [ 0.1979; 1.2203]        5.0</span></span>
+<span><span class="co">#&gt; Cavanagh et al.        0.3549 [-0.0300; 0.7397]        6.3</span></span>
+<span><span class="co">#&gt; DanitzOrsillo          1.7912 [ 1.1139; 2.4685]        3.8</span></span>
+<span><span class="co">#&gt; de Vibe et al.         0.1825 [-0.0484; 0.4133]        7.9</span></span>
+<span><span class="co">#&gt; Frazier et al.         0.4219 [ 0.1380; 0.7057]        7.3</span></span>
+<span><span class="co">#&gt; Frogeli et al.         0.6300 [ 0.2458; 1.0142]        6.3</span></span>
+<span><span class="co">#&gt; Gallego et al.         0.7249 [ 0.2846; 1.1652]        5.7</span></span>
+<span><span class="co">#&gt; Hazlett-Stevens &amp; Oren 0.5287 [ 0.1162; 0.9412]        6.0</span></span>
+<span><span class="co">#&gt; Hintz et al.           0.2840 [-0.0453; 0.6133]        6.9</span></span>
+<span><span class="co">#&gt; Kang et al.            1.2751 [ 0.6142; 1.9360]        3.9</span></span>
+<span><span class="co">#&gt; Kuhlmann et al.        0.1036 [-0.2781; 0.4853]        6.3</span></span>
+<span><span class="co">#&gt; Lever Taylor et al.    0.3884 [-0.0639; 0.8407]        5.6</span></span>
+<span><span class="co">#&gt; Phang et al.           0.5407 [ 0.0619; 1.0196]        5.3</span></span>
+<span><span class="co">#&gt; Rasanen et al.         0.4262 [-0.0794; 0.9317]        5.1</span></span>
+<span><span class="co">#&gt; Ratanasiripong         0.5154 [-0.1731; 1.2039]        3.7</span></span>
+<span><span class="co">#&gt; Shapiro et al.         1.4797 [ 0.8618; 2.0977]        4.2</span></span>
+<span><span class="co">#&gt; Song &amp; Lindquist       0.6126 [ 0.1683; 1.0569]        5.7</span></span>
+<span><span class="co">#&gt; Warnecke et al.        0.6000 [ 0.1120; 1.0880]        5.2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Number of studies: k = 18</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                              SMD            95%-CI    t  p-value</span></span>
+<span><span class="co">#&gt; Random effects model (HK) 0.5771 [ 0.3782; 0.7760] 6.12 &lt; 0.0001</span></span>
+<span><span class="co">#&gt; Prediction interval              [-0.0542; 1.2084]              </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Quantifying heterogeneity (with 95%-CIs):</span></span>
+<span><span class="co">#&gt;  tau^2 = 0.0820 [0.0295; 0.3533]; tau = 0.2863 [0.1717; 0.5944]</span></span>
+<span><span class="co">#&gt;  I^2 = 62.6% [37.9%; 77.5%]; H = 1.64 [1.27; 2.11]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test of heterogeneity:</span></span>
+<span><span class="co">#&gt;      Q d.f. p-value</span></span>
+<span><span class="co">#&gt;  45.50   17  0.0002</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Details of meta-analysis methods:</span></span>
+<span><span class="co">#&gt; - Inverse variance method</span></span>
+<span><span class="co">#&gt; - Restricted maximum-likelihood estimator for tau^2</span></span>
+<span><span class="co">#&gt; - Q-Profile method for confidence interval of tau^2 and tau</span></span>
+<span><span class="co">#&gt; - Calculation of I^2 based on Q</span></span>
+<span><span class="co">#&gt; - Hartung-Knapp adjustment for random effects model (df = 17)</span></span>
+<span><span class="co">#&gt; - Prediction interval based on t-distribution (df = 17)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">year</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2014</span>, <span class="fl">1998</span>, <span class="fl">2010</span>, <span class="fl">1999</span>, <span class="fl">2005</span>, <span class="fl">2014</span>, </span>
+<span>          <span class="fl">2019</span>, <span class="fl">2010</span>, <span class="fl">1982</span>, <span class="fl">2020</span>, <span class="fl">1978</span>, <span class="fl">2001</span>,</span>
+<span>          <span class="fl">2018</span>, <span class="fl">2002</span>, <span class="fl">2009</span>, <span class="fl">2011</span>, <span class="fl">2011</span>, <span class="fl">2013</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">m.gen.reg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/meta/man/metareg.html">metareg</a></span><span class="op">(</span><span class="va">m.gen</span>, <span class="op">~</span><span class="va">year</span><span class="op">)</span></span>
+<span><span class="va">m.gen.reg</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Mixed-Effects Model (k = 18; tau^2 estimator: REML)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; tau^2 (estimated amount of residual heterogeneity):     0.0188 (SE = 0.0226)</span></span>
+<span><span class="co">#&gt; tau (square root of estimated tau^2 value):             0.1371</span></span>
+<span><span class="co">#&gt; I^2 (residual heterogeneity / unaccounted variability): 29.26%</span></span>
+<span><span class="co">#&gt; H^2 (unaccounted variability / sampling variability):   1.41</span></span>
+<span><span class="co">#&gt; R^2 (amount of heterogeneity accounted for):            77.08%</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test for Residual Heterogeneity:</span></span>
+<span><span class="co">#&gt; QE(df = 16) = 27.8273, p-val = 0.0332</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test of Moderators (coefficient 2):</span></span>
+<span><span class="co">#&gt; F(df1 = 1, df2 = 16) = 9.3755, p-val = 0.0075</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Results:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;          estimate       se     tval  df    pval     ci.lb     ci.ub     </span></span>
+<span><span class="co">#&gt; intrcpt  -36.1546  11.9800  -3.0179  16  0.0082  -61.5510  -10.7582  ** </span></span>
+<span><span class="co">#&gt; year       0.0183   0.0060   3.0619  16  0.0075    0.0056    0.0310  ** </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><span class="math inline">\(\hat\tau^2_{\text{unexplained}}=\)</span> 0.0188</p>
+<p><span class="math inline">\(R^2_*\)</span> =77.08% 意味着真实效应大小的 77% 的差异可以用出版年份来解释，这是一个相当大的值。</p>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/meta/man/bubble.metareg.html">bubble</a></span><span class="op">(</span><span class="va">m.gen.reg</span>, studlab <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="Meta_Regression_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 通过meta回归进行亚组分析</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/meta/man/metareg.html">metareg</a></span><span class="op">(</span><span class="va">m.gen</span>, <span class="va">RiskOfBias</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Mixed-Effects Model (k = 18; tau^2 estimator: REML)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; tau^2 (estimated amount of residual heterogeneity):     0.0691 (SE = 0.0424)</span></span>
+<span><span class="co">#&gt; tau (square root of estimated tau^2 value):             0.2630</span></span>
+<span><span class="co">#&gt; I^2 (residual heterogeneity / unaccounted variability): 60.58%</span></span>
+<span><span class="co">#&gt; H^2 (unaccounted variability / sampling variability):   2.54</span></span>
+<span><span class="co">#&gt; R^2 (amount of heterogeneity accounted for):            15.66%</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test for Residual Heterogeneity:</span></span>
+<span><span class="co">#&gt; QE(df = 16) = 39.3084, p-val = 0.0010</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test of Moderators (coefficient 2):</span></span>
+<span><span class="co">#&gt; F(df1 = 1, df2 = 16) = 2.5066, p-val = 0.1329</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Results:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                estimate      se     tval  df    pval    ci.lb   ci.ub      </span></span>
+<span><span class="co">#&gt; intrcpt          0.7691  0.1537   5.0022  16  0.0001   0.4431  1.0950  *** </span></span>
+<span><span class="co">#&gt; RiskOfBiaslow   -0.2992  0.1890  -1.5832  16  0.1329  -0.6999  0.1014      </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>RiskOfBiaslow 效应大小 g = 0.7691-0.2992 ≈0.4699</p>
+</section></section><section id="多元回归" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="多元回归">
+<span class="header-section-number">6.2</span> <strong>多元回归</strong>
+</h2>
+<p><span class="math display">\[
+\begin{equation} \hat \theta_k = \theta + \beta_1x_{1k} + ... + \beta_nx_{nk} + \epsilon_k + \zeta_k \tag{multiple-metareg} \end{equation}
+\]</span></p>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.metafor-project.org">metafor</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dmetar.protectlab.org">dmetar</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">MVRegressionData</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">MVRegressionData</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 36</span></span>
+<span><span class="co">#&gt; Columns: 6</span></span>
+<span><span class="co">#&gt; $ yi         &lt;dbl&gt; 0.09437543, 0.09981923, 0.16931607, 0.17511107, 0.27301641,…</span></span>
+<span><span class="co">#&gt; $ sei        &lt;dbl&gt; 0.1959031, 0.1918510, 0.1193179, 0.1161592, 0.1646946, 0.17…</span></span>
+<span><span class="co">#&gt; $ reputation &lt;dbl&gt; -11, 0, -11, 4, -10, -9, -8, -8, -8, 0, -5, -5, -4, -4, -3,…</span></span>
+<span><span class="co">#&gt; $ quality    &lt;dbl&gt; 6, 9, 5, 9, 2, 10, 6, 3, 10, 3, 1, 5, 10, 2, 1, 2, 4, 1, 8,…</span></span>
+<span><span class="co">#&gt; $ pubyear    &lt;dbl&gt; -0.85475360, -0.75277184, -0.66048349, -0.56304843, -0.4308…</span></span>
+<span><span class="co">#&gt; $ continent  &lt;fct&gt; 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,…</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="多重共线性" class="level3" data-number="6.2.1"><h3 data-number="6.2.1" class="anchored" data-anchor-id="多重共线性">
+<span class="header-section-number">6.2.1</span> 多重共线性</h3>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">MVRegressionData</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"reputation"</span>, <span class="st">"quality"</span>, <span class="st">"pubyear"</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;            reputation    quality    pubyear</span></span>
+<span><span class="co">#&gt; reputation  1.0000000  0.3015694  0.3346594</span></span>
+<span><span class="co">#&gt; quality     0.3015694  1.0000000 -0.1551123</span></span>
+<span><span class="co">#&gt; pubyear     0.3346594 -0.1551123  1.0000000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m.qual</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://wviechtb.github.io/metafor/reference/rma.uni.html">rma</a></span><span class="op">(</span>yi <span class="op">=</span> <span class="va">yi</span>,</span>
+<span>              sei <span class="op">=</span> <span class="va">sei</span>,</span>
+<span>              data <span class="op">=</span> <span class="va">MVRegressionData</span>,</span>
+<span>              method <span class="op">=</span> <span class="st">"ML"</span>,</span>
+<span>              mods <span class="op">=</span> <span class="op">~</span> <span class="va">quality</span>,</span>
+<span>              test <span class="op">=</span> <span class="st">"knha"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">m.qual</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Mixed-Effects Model (k = 36; tau^2 estimator: ML)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; tau^2 (estimated amount of residual heterogeneity):     0.0667 (SE = 0.0275)</span></span>
+<span><span class="co">#&gt; tau (square root of estimated tau^2 value):             0.2583</span></span>
+<span><span class="co">#&gt; I^2 (residual heterogeneity / unaccounted variability): 60.04%</span></span>
+<span><span class="co">#&gt; H^2 (unaccounted variability / sampling variability):   2.50</span></span>
+<span><span class="co">#&gt; R^2 (amount of heterogeneity accounted for):            7.37%</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test for Residual Heterogeneity:</span></span>
+<span><span class="co">#&gt; QE(df = 34) = 88.6130, p-val &lt; .0001</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test of Moderators (coefficient 2):</span></span>
+<span><span class="co">#&gt; F(df1 = 1, df2 = 34) = 3.5330, p-val = 0.0688</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Results:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;          estimate      se    tval  df    pval    ci.lb   ci.ub    </span></span>
+<span><span class="co">#&gt; intrcpt    0.3429  0.1354  2.5318  34  0.0161   0.0677  0.6181  * </span></span>
+<span><span class="co">#&gt; quality    0.0356  0.0189  1.8796  34  0.0688  -0.0029  0.0740  . </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m.qual.rep</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://wviechtb.github.io/metafor/reference/rma.uni.html">rma</a></span><span class="op">(</span>yi <span class="op">=</span> <span class="va">yi</span>, </span>
+<span>                  sei <span class="op">=</span> <span class="va">sei</span>, </span>
+<span>                  data <span class="op">=</span> <span class="va">MVRegressionData</span>, </span>
+<span>                  method <span class="op">=</span> <span class="st">"ML"</span>, </span>
+<span>                  mods <span class="op">=</span> <span class="op">~</span> <span class="va">quality</span> <span class="op">+</span> <span class="va">reputation</span>, </span>
+<span>                  test <span class="op">=</span> <span class="st">"knha"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">m.qual.rep</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Mixed-Effects Model (k = 36; tau^2 estimator: ML)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; tau^2 (estimated amount of residual heterogeneity):     0.0238 (SE = 0.0161)</span></span>
+<span><span class="co">#&gt; tau (square root of estimated tau^2 value):             0.1543</span></span>
+<span><span class="co">#&gt; I^2 (residual heterogeneity / unaccounted variability): 34.62%</span></span>
+<span><span class="co">#&gt; H^2 (unaccounted variability / sampling variability):   1.53</span></span>
+<span><span class="co">#&gt; R^2 (amount of heterogeneity accounted for):            66.95%</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test for Residual Heterogeneity:</span></span>
+<span><span class="co">#&gt; QE(df = 33) = 58.3042, p-val = 0.0042</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test of Moderators (coefficients 2:3):</span></span>
+<span><span class="co">#&gt; F(df1 = 2, df2 = 33) = 12.2476, p-val = 0.0001</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Results:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;             estimate      se    tval  df    pval    ci.lb   ci.ub      </span></span>
+<span><span class="co">#&gt; intrcpt       0.5005  0.1090  4.5927  33  &lt;.0001   0.2788  0.7222  *** </span></span>
+<span><span class="co">#&gt; quality       0.0110  0.0151  0.7312  33  0.4698  -0.0197  0.0417      </span></span>
+<span><span class="co">#&gt; reputation    0.0343  0.0075  4.5435  33  &lt;.0001   0.0189  0.0496  *** </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">m.qual</span>, <span class="va">m.qual.rep</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;         df     AIC     BIC    AICc   logLik     LRT   pval      QE  tau^2 </span></span>
+<span><span class="co">#&gt; Full     4 19.4816 25.8157 20.7720  -5.7408                58.3042 0.0238 </span></span>
+<span><span class="co">#&gt; Reduced  3 36.9808 41.7314 37.7308 -15.4904 19.4992 &lt;.0001 88.6130 0.0667 </span></span>
+<span><span class="co">#&gt;              R^2 </span></span>
+<span><span class="co">#&gt; Full             </span></span>
+<span><span class="co">#&gt; Reduced 64.3197%</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><code>anova</code> <code>LRT</code> X2= 19.4992 ,p&lt;0.001</p>
+</section><section id="交互效应" class="level3" data-number="6.2.2"><h3 data-number="6.2.2" class="anchored" data-anchor-id="交互效应">
+<span class="header-section-number">6.2.2</span> 交互效应</h3>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Add factor labels to 'continent'</span></span>
+<span><span class="co"># 0 = Europe</span></span>
+<span><span class="co"># 1 = North America</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">MVRegressionData</span><span class="op">$</span><span class="va">continent</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Europe"</span>, <span class="st">"North America"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Fit the meta-regression model</span></span>
+<span><span class="va">m.qual.rep.int</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://wviechtb.github.io/metafor/reference/rma.uni.html">rma</a></span><span class="op">(</span>yi <span class="op">=</span> <span class="va">yi</span>, </span>
+<span>                      sei <span class="op">=</span> <span class="va">sei</span>, </span>
+<span>                      data <span class="op">=</span> <span class="va">MVRegressionData</span>, </span>
+<span>                      method <span class="op">=</span> <span class="st">"REML"</span>, </span>
+<span>                      mods <span class="op">=</span> <span class="op">~</span> <span class="va">pubyear</span> <span class="op">*</span> <span class="va">continent</span>, </span>
+<span>                      test <span class="op">=</span> <span class="st">"knha"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">m.qual.rep.int</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Mixed-Effects Model (k = 36; tau^2 estimator: REML)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; tau^2 (estimated amount of residual heterogeneity):     0 (SE = 0.0098)</span></span>
+<span><span class="co">#&gt; tau (square root of estimated tau^2 value):             0</span></span>
+<span><span class="co">#&gt; I^2 (residual heterogeneity / unaccounted variability): 0.00%</span></span>
+<span><span class="co">#&gt; H^2 (unaccounted variability / sampling variability):   1.00</span></span>
+<span><span class="co">#&gt; R^2 (amount of heterogeneity accounted for):            100.00%</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test for Residual Heterogeneity:</span></span>
+<span><span class="co">#&gt; QE(df = 32) = 24.8408, p-val = 0.8124</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test of Moderators (coefficients 2:4):</span></span>
+<span><span class="co">#&gt; F(df1 = 3, df2 = 32) = 28.7778, p-val &lt; .0001</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Results:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                                 estimate      se    tval  df    pval    ci.lb </span></span>
+<span><span class="co">#&gt; intrcpt                           0.3892  0.0421  9.2472  32  &lt;.0001   0.3035 </span></span>
+<span><span class="co">#&gt; pubyear                           0.1683  0.0834  2.0184  32  0.0520  -0.0015 </span></span>
+<span><span class="co">#&gt; continentNorth America            0.3986  0.0658  6.0539  32  &lt;.0001   0.2645 </span></span>
+<span><span class="co">#&gt; pubyear:continentNorth America    0.6323  0.1271  4.9754  32  &lt;.0001   0.3734 </span></span>
+<span><span class="co">#&gt;                                  ci.ub      </span></span>
+<span><span class="co">#&gt; intrcpt                         0.4750  *** </span></span>
+<span><span class="co">#&gt; pubyear                         0.3380    . </span></span>
+<span><span class="co">#&gt; continentNorth America          0.5327  *** </span></span>
+<span><span class="co">#&gt; pubyear:continentNorth America  0.8911  *** </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section><section id="过拟合" class="level3" data-number="6.2.3"><h3 data-number="6.2.3" class="anchored" data-anchor-id="过拟合">
+<span class="header-section-number">6.2.3</span> 过拟合</h3>
+<p><span class="math inline">\(R^2_*\)</span> = 100% ，在实践中，几乎不会解释数据中的所有异质性——事实上，如果在现实生活中的数据中找到这样的结果，这可能是模型过度拟合了。</p>
+</section><section id="排列测试" class="level3" data-number="6.2.4"><h3 data-number="6.2.4" class="anchored" data-anchor-id="排列测试">
+<span class="header-section-number">6.2.4</span> 排列测试</h3>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://wviechtb.github.io/metafor/reference/permutest.html">permutest</a></span><span class="op">(</span><span class="va">m.qual.rep</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Running 1000 iterations for an approximate permutation test.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test of Moderators (coefficients 2:3):¹</span></span>
+<span><span class="co">#&gt; F(df1 = 2, df2 = 33) = 12.2476, p-val = 0.0010</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Results:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;             estimate      se    tval  df    pval¹    ci.lb   ci.ub      </span></span>
+<span><span class="co">#&gt; intrcpt       0.5005  0.1090  4.5927  33  0.1990    0.2788  0.7222      </span></span>
+<span><span class="co">#&gt; quality       0.0110  0.0151  0.7312  33  0.4460   -0.0197  0.0417      </span></span>
+<span><span class="co">#&gt; reputation    0.0343  0.0075  4.5435  33  0.0010    0.0189  0.0496  *** </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; 1) p-values based on permutation testing</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section><section id="多模型推理" class="level3" data-number="6.2.5"><h3 data-number="6.2.5" class="anchored" data-anchor-id="多模型推理">
+<span class="header-section-number">6.2.5</span> 多模型推理</h3>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">multimodel.inference</span>(<span class="at">TE =</span> <span class="st">"yi"</span>, </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">seTE =</span> <span class="st">"sei"</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> MVRegressionData,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">predictors =</span> <span class="fu">c</span>(<span class="st">"pubyear"</span>, <span class="st">"quality"</span>, </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"reputation"</span>, <span class="st">"continent"</span>),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">interaction =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="er">|====</span>                                                                  <span class="er">|</span>   <span class="dv">6</span>%</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=========</span>                                                             <span class="er">|</span>  <span class="dv">12</span>%</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=============</span>                                                         <span class="er">|</span>  <span class="dv">19</span>%</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==================</span>                                                    <span class="er">|</span>  <span class="dv">25</span>%</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================</span>                                                <span class="er">|</span>  <span class="dv">31</span>%</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==========================</span>                                            <span class="er">|</span>  <span class="dv">38</span>%</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===============================</span>                                       <span class="er">|</span>  <span class="dv">44</span>%</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===================================</span>                                   <span class="er">|</span>  <span class="dv">50</span>%</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=======================================</span>                               <span class="er">|</span>  <span class="dv">56</span>%</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>  <span class="er">|============================================</span>                          <span class="er">|</span>  <span class="dv">62</span>%</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>  <span class="er">|================================================</span>                      <span class="er">|</span>  <span class="dv">69</span>%</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>  <span class="er">|====================================================</span>                  <span class="er">|</span>  <span class="dv">75</span>%</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=========================================================</span>             <span class="er">|</span>  <span class="dv">81</span>%</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=============================================================</span>         <span class="er">|</span>  <span class="dv">88</span>%</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==================================================================</span>    <span class="er">|</span>  <span class="dv">94</span>%</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Multimodel Inference: Final Results</span></span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------</span></span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  - Number of fitted models: 16</span></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  - Full formula: ~ pubyear + quality + reputation + continent</span></span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  - Coefficient significance test: knha</span></span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  - Interactions modeled: no</span></span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  - Evaluation criterion: AICc </span></span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Best 5 Models</span></span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------</span></span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Global model call: metafor::rma(yi = TE, sei = seTE, mods = form, data = glm.data, </span></span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     method = method, test = test)</span></span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Model selection table </span></span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    (Intrc) cntnn  pubyr   qulty   rpttn df logLik AICc delta weight</span></span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 12       +     + 0.3533         0.02160  5  2.981  6.0  0.00  0.536</span></span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 16       +     + 0.4028 0.02210 0.01754  6  4.071  6.8  0.72  0.375</span></span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8        +     + 0.4948 0.03574          5  0.646 10.7  4.67  0.052</span></span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 11       +       0.2957         0.02725  4 -1.750 12.8  6.75  0.018</span></span>
+<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 15       +       0.3547 0.02666 0.02296  5 -0.395 12.8  6.75  0.018</span></span>
+<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Models ranked by AICc(x) </span></span>
+<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Multimodel Inference Coefficients</span></span>
+<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------</span></span>
+<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                          Estimate  Std. Error   z value  Pr(&gt;|z|)</span></span>
+<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; intrcpt                0.38614661 0.106983583 3.6094006 0.0003069</span></span>
+<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; continentNorth America 0.24743836 0.083113174 2.9771256 0.0029096</span></span>
+<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; pubyear                0.37816796 0.083045572 4.5537402 0.0000053</span></span>
+<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; reputation             0.01899347 0.007420427 2.5596198 0.0104787</span></span>
+<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; quality                0.01060060 0.014321158 0.7402055 0.4591753</span></span>
+<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Predictor Importance</span></span>
+<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------</span></span>
+<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        model importance</span></span>
+<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1    pubyear  0.9988339</span></span>
+<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  continent  0.9621839</span></span>
+<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 reputation  0.9428750</span></span>
+<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    quality  0.4432826</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="Meta_Regression_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+<!-- -->
+
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./SubgroupAnalysis.html" class="pagination-link" aria-label="亚组分析">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">亚组分析</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./PublicationBias.html" class="pagination-link" aria-label="发表偏倚">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">发表偏倚</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb13" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Meta 回归"</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>Meta-regression 通过假设混合效应模型来实现。由于抽样误差和研究之间的异质性，观察到的研究偏离了真实的总体效应。</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>普通最小二乘法的加权版本</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>meta 回归 使用一个或多个变量x来预测真实效应大小的差异。</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>\hat\theta_k = \theta + \beta x_{k} + \epsilon_k+\zeta_k</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>抽样误差$\epsilon_k$和研究间异质性 $\zeta_k$</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>固定效应（$\beta$）和 随机效应（$\zeta_k$）</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Meta回归模型</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="fu">### **使用分类预测因子的meta回归**</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>\begin{equation}   </span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>D_g=\begin{cases}     </span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>0: &amp; \text{Subgroup A}<span class="sc">\\</span>     </span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>1: &amp; \text{Subgroup B.}   </span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>\end{cases}   </span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>\begin{equation} \hat\theta_k = \theta + \beta D_g +\epsilon_k+\zeta_k.  \end{equation}</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>则</span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>\begin{equation}   D_g=\begin{cases}     0: &amp; \text{$\hat\theta_k = \theta_A + \epsilon_k+\zeta_k$}<span class="sc">\\</span>     1: &amp; \text{$\hat\theta_k = \theta_B + \theta_{\Delta} +\epsilon_k+\zeta_k$}   \end{cases}   \end{equation}</span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/metaregression_subgroups.png)</span>{fig-align="center" width="419"}</span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a><span class="fu">### **使用连续预测因子的meta回归**</span></span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a><span class="al">![](images/metareg_form_continuous.png)</span>{fig-align="center" width="293"}</span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(meta)</span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>m.gen <span class="ot">&lt;-</span> <span class="fu">metagen</span>(<span class="at">TE =</span> TE,</span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>                 <span class="at">seTE =</span> seTE,</span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>                 <span class="at">studlab =</span> Author,</span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> dmetar<span class="sc">::</span>ThirdWave,</span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>                 <span class="at">sm =</span> <span class="st">"SMD"</span>,</span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fixed =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>                 <span class="at">random =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>                 <span class="at">method.tau =</span> <span class="st">"REML"</span>,</span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>                 <span class="at">method.random.ci =</span> <span class="st">"HK"</span>,</span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>                 <span class="at">prediction =</span> T,</span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a>                 <span class="at">title =</span> <span class="st">"Third Wave Psychotherapies"</span>)</span>
+<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m.gen)</span>
+<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a>year <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2014</span>, <span class="dv">1998</span>, <span class="dv">2010</span>, <span class="dv">1999</span>, <span class="dv">2005</span>, <span class="dv">2014</span>, </span>
+<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a>          <span class="dv">2019</span>, <span class="dv">2010</span>, <span class="dv">1982</span>, <span class="dv">2020</span>, <span class="dv">1978</span>, <span class="dv">2001</span>,</span>
+<span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a>          <span class="dv">2018</span>, <span class="dv">2002</span>, <span class="dv">2009</span>, <span class="dv">2011</span>, <span class="dv">2011</span>, <span class="dv">2013</span>)</span>
+<span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-73"><a href="#cb13-73" aria-hidden="true" tabindex="-1"></a>m.gen.reg <span class="ot">&lt;-</span> <span class="fu">metareg</span>(m.gen, <span class="sc">~</span>year)</span>
+<span id="cb13-74"><a href="#cb13-74" aria-hidden="true" tabindex="-1"></a>m.gen.reg</span>
+<span id="cb13-75"><a href="#cb13-75" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-76"><a href="#cb13-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-77"><a href="#cb13-77" aria-hidden="true" tabindex="-1"></a>$\hat\tau^2_{\text{unexplained}}=$ 0.0188</span>
+<span id="cb13-78"><a href="#cb13-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-79"><a href="#cb13-79" aria-hidden="true" tabindex="-1"></a>$R^2_*$ =77.08% 意味着真实效应大小的 77% 的差异可以用出版年份来解释，这是一个相当大的值。</span>
+<span id="cb13-80"><a href="#cb13-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-83"><a href="#cb13-83" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-84"><a href="#cb13-84" aria-hidden="true" tabindex="-1"></a><span class="fu">bubble</span>(m.gen.reg, <span class="at">studlab =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-85"><a href="#cb13-85" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-86"><a href="#cb13-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-89"><a href="#cb13-89" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-90"><a href="#cb13-90" aria-hidden="true" tabindex="-1"></a><span class="co"># 通过meta回归进行亚组分析</span></span>
+<span id="cb13-91"><a href="#cb13-91" aria-hidden="true" tabindex="-1"></a><span class="fu">metareg</span>(m.gen, RiskOfBias)</span>
+<span id="cb13-92"><a href="#cb13-92" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-93"><a href="#cb13-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-94"><a href="#cb13-94" aria-hidden="true" tabindex="-1"></a>RiskOfBiaslow 效应大小 g = 0.7691-0.2992 ≈0.4699</span>
+<span id="cb13-95"><a href="#cb13-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-96"><a href="#cb13-96" aria-hidden="true" tabindex="-1"></a><span class="fu">## **多元回归**</span></span>
+<span id="cb13-97"><a href="#cb13-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-98"><a href="#cb13-98" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb13-99"><a href="#cb13-99" aria-hidden="true" tabindex="-1"></a>\begin{equation} \hat \theta_k = \theta + \beta_1x_{1k} + ... + \beta_nx_{nk} + \epsilon_k + \zeta_k \tag{multiple-metareg} \end{equation}</span>
+<span id="cb13-100"><a href="#cb13-100" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb13-101"><a href="#cb13-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-102"><a href="#cb13-102" aria-hidden="true" tabindex="-1"></a><span class="in">```{r packages-and-data}</span></span>
+<span id="cb13-103"><a href="#cb13-103" aria-hidden="true" tabindex="-1"></a><span class="in">library(metafor)</span></span>
+<span id="cb13-104"><a href="#cb13-104" aria-hidden="true" tabindex="-1"></a><span class="in">library(tidyverse)</span></span>
+<span id="cb13-105"><a href="#cb13-105" aria-hidden="true" tabindex="-1"></a><span class="in">library(dmetar)</span></span>
+<span id="cb13-106"><a href="#cb13-106" aria-hidden="true" tabindex="-1"></a><span class="in">data(MVRegressionData)</span></span>
+<span id="cb13-107"><a href="#cb13-107" aria-hidden="true" tabindex="-1"></a><span class="in">glimpse(MVRegressionData)</span></span>
+<span id="cb13-108"><a href="#cb13-108" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-109"><a href="#cb13-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-110"><a href="#cb13-110" aria-hidden="true" tabindex="-1"></a><span class="fu">### 多重共线性</span></span>
+<span id="cb13-111"><a href="#cb13-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-114"><a href="#cb13-114" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-115"><a href="#cb13-115" aria-hidden="true" tabindex="-1"></a>MVRegressionData[,<span class="fu">c</span>(<span class="st">"reputation"</span>, <span class="st">"quality"</span>, <span class="st">"pubyear"</span>)] <span class="sc">%&gt;%</span> </span>
+<span id="cb13-116"><a href="#cb13-116" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cor</span>()</span>
+<span id="cb13-117"><a href="#cb13-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-118"><a href="#cb13-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-119"><a href="#cb13-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-122"><a href="#cb13-122" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-123"><a href="#cb13-123" aria-hidden="true" tabindex="-1"></a>m.qual <span class="ot">&lt;-</span> <span class="fu">rma</span>(<span class="at">yi =</span> yi,</span>
+<span id="cb13-124"><a href="#cb13-124" aria-hidden="true" tabindex="-1"></a>              <span class="at">sei =</span> sei,</span>
+<span id="cb13-125"><a href="#cb13-125" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> MVRegressionData,</span>
+<span id="cb13-126"><a href="#cb13-126" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"ML"</span>,</span>
+<span id="cb13-127"><a href="#cb13-127" aria-hidden="true" tabindex="-1"></a>              <span class="at">mods =</span> <span class="sc">~</span> quality,</span>
+<span id="cb13-128"><a href="#cb13-128" aria-hidden="true" tabindex="-1"></a>              <span class="at">test =</span> <span class="st">"knha"</span>)</span>
+<span id="cb13-129"><a href="#cb13-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-130"><a href="#cb13-130" aria-hidden="true" tabindex="-1"></a>m.qual</span>
+<span id="cb13-131"><a href="#cb13-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-132"><a href="#cb13-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-135"><a href="#cb13-135" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-136"><a href="#cb13-136" aria-hidden="true" tabindex="-1"></a>m.qual.rep <span class="ot">&lt;-</span> <span class="fu">rma</span>(<span class="at">yi =</span> yi, </span>
+<span id="cb13-137"><a href="#cb13-137" aria-hidden="true" tabindex="-1"></a>                  <span class="at">sei =</span> sei, </span>
+<span id="cb13-138"><a href="#cb13-138" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> MVRegressionData, </span>
+<span id="cb13-139"><a href="#cb13-139" aria-hidden="true" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">"ML"</span>, </span>
+<span id="cb13-140"><a href="#cb13-140" aria-hidden="true" tabindex="-1"></a>                  <span class="at">mods =</span> <span class="sc">~</span> quality <span class="sc">+</span> reputation, </span>
+<span id="cb13-141"><a href="#cb13-141" aria-hidden="true" tabindex="-1"></a>                  <span class="at">test =</span> <span class="st">"knha"</span>)</span>
+<span id="cb13-142"><a href="#cb13-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-143"><a href="#cb13-143" aria-hidden="true" tabindex="-1"></a>m.qual.rep</span>
+<span id="cb13-144"><a href="#cb13-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-145"><a href="#cb13-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-148"><a href="#cb13-148" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-149"><a href="#cb13-149" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(m.qual, m.qual.rep)</span>
+<span id="cb13-150"><a href="#cb13-150" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-151"><a href="#cb13-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-152"><a href="#cb13-152" aria-hidden="true" tabindex="-1"></a><span class="in">`anova`</span> <span class="in">`LRT`</span> X2= 19.4992 ,p<span class="sc">\&lt;</span>0.001</span>
+<span id="cb13-153"><a href="#cb13-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-154"><a href="#cb13-154" aria-hidden="true" tabindex="-1"></a><span class="fu">### 交互效应</span></span>
+<span id="cb13-155"><a href="#cb13-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-158"><a href="#cb13-158" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-159"><a href="#cb13-159" aria-hidden="true" tabindex="-1"></a><span class="co"># Add factor labels to 'continent'</span></span>
+<span id="cb13-160"><a href="#cb13-160" aria-hidden="true" tabindex="-1"></a><span class="co"># 0 = Europe</span></span>
+<span id="cb13-161"><a href="#cb13-161" aria-hidden="true" tabindex="-1"></a><span class="co"># 1 = North America</span></span>
+<span id="cb13-162"><a href="#cb13-162" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(MVRegressionData<span class="sc">$</span>continent) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Europe"</span>, <span class="st">"North America"</span>)</span>
+<span id="cb13-163"><a href="#cb13-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-164"><a href="#cb13-164" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the meta-regression model</span></span>
+<span id="cb13-165"><a href="#cb13-165" aria-hidden="true" tabindex="-1"></a>m.qual.rep.int <span class="ot">&lt;-</span> <span class="fu">rma</span>(<span class="at">yi =</span> yi, </span>
+<span id="cb13-166"><a href="#cb13-166" aria-hidden="true" tabindex="-1"></a>                      <span class="at">sei =</span> sei, </span>
+<span id="cb13-167"><a href="#cb13-167" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data =</span> MVRegressionData, </span>
+<span id="cb13-168"><a href="#cb13-168" aria-hidden="true" tabindex="-1"></a>                      <span class="at">method =</span> <span class="st">"REML"</span>, </span>
+<span id="cb13-169"><a href="#cb13-169" aria-hidden="true" tabindex="-1"></a>                      <span class="at">mods =</span> <span class="sc">~</span> pubyear <span class="sc">*</span> continent, </span>
+<span id="cb13-170"><a href="#cb13-170" aria-hidden="true" tabindex="-1"></a>                      <span class="at">test =</span> <span class="st">"knha"</span>)</span>
+<span id="cb13-171"><a href="#cb13-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-172"><a href="#cb13-172" aria-hidden="true" tabindex="-1"></a>m.qual.rep.int</span>
+<span id="cb13-173"><a href="#cb13-173" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-174"><a href="#cb13-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-175"><a href="#cb13-175" aria-hidden="true" tabindex="-1"></a><span class="fu">### 过拟合</span></span>
+<span id="cb13-176"><a href="#cb13-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-177"><a href="#cb13-177" aria-hidden="true" tabindex="-1"></a>$R^2_*$ = 100% ，在实践中，几乎不会解释数据中的所有异质性——事实上，如果在现实生活中的数据中找到这样的结果，这可能是模型过度拟合了。</span>
+<span id="cb13-178"><a href="#cb13-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-179"><a href="#cb13-179" aria-hidden="true" tabindex="-1"></a><span class="fu">### 排列测试</span></span>
+<span id="cb13-180"><a href="#cb13-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-183"><a href="#cb13-183" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-184"><a href="#cb13-184" aria-hidden="true" tabindex="-1"></a><span class="fu">permutest</span>(m.qual.rep)</span>
+<span id="cb13-185"><a href="#cb13-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-186"><a href="#cb13-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-187"><a href="#cb13-187" aria-hidden="true" tabindex="-1"></a><span class="fu">### 多模型推理</span></span>
+<span id="cb13-188"><a href="#cb13-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-191"><a href="#cb13-191" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb13-192"><a href="#cb13-192" aria-hidden="true" tabindex="-1"></a><span class="fu">multimodel.inference</span>(<span class="at">TE =</span> <span class="st">"yi"</span>, </span>
+<span id="cb13-193"><a href="#cb13-193" aria-hidden="true" tabindex="-1"></a>                     <span class="at">seTE =</span> <span class="st">"sei"</span>,</span>
+<span id="cb13-194"><a href="#cb13-194" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> MVRegressionData,</span>
+<span id="cb13-195"><a href="#cb13-195" aria-hidden="true" tabindex="-1"></a>                     <span class="at">predictors =</span> <span class="fu">c</span>(<span class="st">"pubyear"</span>, <span class="st">"quality"</span>, </span>
+<span id="cb13-196"><a href="#cb13-196" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"reputation"</span>, <span class="st">"continent"</span>),</span>
+<span id="cb13-197"><a href="#cb13-197" aria-hidden="true" tabindex="-1"></a>                     <span class="at">interaction =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb13-198"><a href="#cb13-198" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+</body></html>
